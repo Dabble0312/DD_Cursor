@@ -7,16 +7,24 @@
     <title>Login | DojiDash</title>
     <link rel="icon" href="assets/images/Logo.gif" type="image/gif">
     
-    <!-- Design System -->
-    <link rel="stylesheet" href="tokens.css">
-    <link rel="stylesheet" href="login.css">
-    
     <!-- Modern Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Design System - Dark Theme -->
+    <link rel="stylesheet" href="tokens-dark.css">
+    <link rel="stylesheet" href="login.css">
+    
+    <style>
+        /* Custom scrollbar for dark theme */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0f1a; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #334155; }
+    </style>
 </head>
-<body>
+<body class="dark-theme">
 
     <!-- Left Section: Brand & Atmosphere -->
     <aside class="login-left">

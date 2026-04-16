@@ -8,17 +8,33 @@
     <title>Training Hub | DojiDash</title>
     <link rel="icon" href="assets/images/Logo.gif" type="image/gif">
 
-    <!-- Design System -->
-    <link rel="stylesheet" href="tokens.css">
-    <link rel="stylesheet" href="dashboard.css">
-
     <!-- Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Design System - Dark Theme -->
+    <link rel="stylesheet" href="tokens-dark.css">
+    <link rel="stylesheet" href="dashboard.css">
+
+    <style>
+        /* Custom scrollbar for dark theme */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0f1a; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+        /* Button transitions */
+        .mode-card { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .mode-card:hover { transform: translateY(-4px); }
+
+        /* Subtle glow effects */
+        .glow-text-green { text-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
+        .glow-text-red { text-shadow: 0 0 20px rgba(239, 68, 68, 0.3); }
+    </style>
 </head>
 
-<body>
+<body class="dark-theme">
 
     <!-- TOP NAVIGATION -->
     <nav class="top-nav">
