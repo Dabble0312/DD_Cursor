@@ -129,7 +129,7 @@ function initChart() {
 
     chart = window.LightweightCharts.createChart(chartDiv, {
         height: 501,
-        layout: { textColor: '#000', backgroundColor: '#fff' },
+        layout: { textColor: '#e2e8f0', backgroundColor: '#0a0f1a' },
         timeScale: { timeVisible: true, secondsVisible: false, rightOffset: 4 },
         rightPriceScale: { scaleMargins: { top: 0.05, bottom: 0.25 } },
     });
