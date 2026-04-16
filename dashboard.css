@@ -1,19 +1,9 @@
-/* dashboard.css — Premium platform-style layout for the DojoDash Training Hub */
-
-:root {
-  --bg-minimal: #fcfcfd;
-  --surface: #ffffff;
-  --accent: #6366f1; /* Indigo */
-  --text-main: #0f172a;
-  --text-muted: #64748b;
-  --border: rgba(0, 0, 0, 0.05);
-  --shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 10px -2px rgba(0, 0, 0, 0.03);
-  --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
-}
+/* dashboard.css — Dark cinematic theme for DojiDash Training Hub
+   Bloomberg terminal meets Apple design aesthetic */
 
 body {
-  background-color: var(--bg-minimal);
-  color: var(--text-main);
+  background-color: var(--color-bg, #03060a);
+  color: var(--color-text-primary, #e2e8f0);
   font-family: 'Inter', system-ui, sans-serif;
   margin: 0;
   padding: 0;
@@ -23,8 +13,8 @@ body {
 /* ── Top Navigation ── */
 .top-nav {
   height: 72px;
-  background: #0f172a; /* Login page deep blue */
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  background: var(--color-surface, #0a0f1a);
+  border-bottom: 1px solid var(--color-border, rgba(51, 65, 85, 0.5));
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -35,7 +25,7 @@ body {
 }
 
 .nav-logo {
-  height: 120px; /* Bigger logo in hero */
+  height: 120px;
   width: auto;
   margin-bottom: 32px;
 }
@@ -43,37 +33,37 @@ body {
 .nav-user {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Spread username and logout */
+  justify-content: space-between;
   width: 100%;
   font-size: 14px;
   font-weight: 500;
-  color: rgba(255,255,255,0.7);
+  color: var(--color-text-secondary, #94a3b8);
 }
 
 .nav-user strong {
-  color: #ffffff;
+  color: var(--color-text-primary, #e2e8f0);
   font-weight: 700;
 }
 
 .logout-link {
-  color: #ffffff;
+  color: var(--color-text-primary, #e2e8f0);
   text-decoration: none;
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   padding: 8px 16px;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid var(--color-border, rgba(51, 65, 85, 0.5));
   border-radius: 8px;
   transition: all 0.2s ease;
   cursor: pointer;
-  background: rgba(255,255,255,0.05);
+  background: var(--color-surface-elevated, #0f1623);
 }
 
 .logout-link:hover {
-  border-color: #ef4444;
+  border-color: var(--color-rose, #ef4444);
   color: #ffffff;
-  background: #ef4444;
+  background: var(--color-rose, #ef4444);
 }
 
 /* ── Hero Section ── */
@@ -85,10 +75,10 @@ body {
 }
 
 .mascot-icon {
-  width: 200px; /* Even bigger hero logo */
+  width: 200px;
   height: auto;
   margin-bottom: 24px;
-  filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
+  filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));
 }
 
 .hero h1 {
@@ -96,12 +86,12 @@ body {
   font-weight: 800;
   letter-spacing: -0.03em;
   margin-bottom: 12px;
-  color: var(--text-main);
+  color: var(--color-text-primary, #e2e8f0);
 }
 
 .hero p {
   font-size: 18px;
-  color: var(--text-muted);
+  color: var(--color-text-secondary, #94a3b8);
   font-weight: 500;
 }
 
@@ -116,13 +106,13 @@ body {
 }
 
 .mode-card {
-  background: var(--surface);
+  background: var(--color-surface, #0a0f1a);
   padding: 40px;
   border-radius: 24px;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--color-border, rgba(51, 65, 85, 0.5));
+  box-shadow: var(--shadow-soft, 0 4px 20px -2px rgba(0, 0, 0, 0.4));
   text-align: left;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -136,15 +126,15 @@ body {
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 4px;
-  background: var(--accent);
+  background: var(--color-indigo, #6366f1);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
 .mode-card:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-hover);
-  border-color: rgba(99, 102, 241, 0.2);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover, 0 20px 25px -5px rgba(0, 0, 0, 0.5));
+  border-color: var(--color-indigo, rgba(99, 102, 241, 0.4));
 }
 
 .mode-card:hover::before {
@@ -155,7 +145,8 @@ body {
   font-size: 32px;
   width: 64px;
   height: 64px;
-  background: #f1f5f9;
+  background: var(--color-surface-elevated, #0f1623);
+  border: 1px solid var(--color-border-subtle, rgba(51, 65, 85, 0.3));
   border-radius: 16px;
   display: flex;
   align-items: center;
@@ -166,30 +157,30 @@ body {
   font-size: 22px;
   font-weight: 700;
   margin-bottom: 8px;
-  color: var(--text-main);
+  color: var(--color-text-primary, #e2e8f0);
 }
 
 .card-content p {
   font-size: 15px;
-  color: var(--text-muted);
+  color: var(--color-text-secondary, #94a3b8);
   line-height: 1.6;
 }
 
-/* Color variations for icons */
-.icon-blue { background: #e0e7ff; color: #4338ca; }
-.icon-green { background: #dcfce7; color: #15803d; }
-.icon-slate { background: #f1f5f9; color: #334155; }
-.icon-teal { background: #f0fdfa; color: #0f766e; }
-.icon-indigo { background: #eef2ff; color: #4f46e5; }
+/* Color variations for icons - dark theme versions */
+.icon-blue { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+.icon-green { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+.icon-slate { background: rgba(71, 85, 105, 0.2); color: #94a3b8; border: 1px solid rgba(71, 85, 105, 0.3); }
+.icon-teal { background: rgba(20, 184, 166, 0.15); color: #2dd4bf; border: 1px solid rgba(20, 184, 166, 0.3); }
+.icon-indigo { background: rgba(99, 102, 241, 0.15); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.3); }
 
 /* ── Footer ── */
 .dashboard-footer {
   text-align: center;
   padding: 64px 24px;
   font-size: 14px;
-  color: var(--text-muted);
-  border-top: 1px solid var(--border);
-  background: white;
+  color: var(--color-text-secondary, #94a3b8);
+  border-top: 1px solid var(--color-border, rgba(51, 65, 85, 0.5));
+  background: var(--color-surface, #0a0f1a);
 }
 
 /* ── Responsive ── */

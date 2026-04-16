@@ -8,10 +8,30 @@
         content="DojiDash Focus Mode — deep-dive candle analysis with pattern detection and NLP summaries.">
     <title>DojiDash — Focus Mode</title>
     <link rel="icon" href="assets/images/Logo.gif" type="image/gif">
-    <link rel="stylesheet" href="tokens.css">
+    
+    <!-- Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Design System: Dark Cinematic Theme -->
     <link rel="stylesheet" href="tokens-dark.css">
     <link rel="stylesheet" href="focus.css">
-
+    
+    <style>
+        /* Custom scrollbar for dark theme */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0f1a; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #334155; }
+        
+        /* Chart container override */
+        #chart { background: transparent !important; }
+        
+        /* Subtle glow effects */
+        .glow-text-green { text-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
+        .glow-text-red { text-shadow: 0 0 20px rgba(239, 68, 68, 0.3); }
+    </style>
 </head>
 
 <body class="dark-theme">

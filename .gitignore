@@ -1,1 +1,1 @@
-Nothing should be ignored based on the provided file changes. The changes consist only of source files (.css, .html, .js) and the .gitignore file itself, with no build artifacts, dependencies, or temporary files that need to be ignored.
+Nothing should be ignored based on the provided file changes, as they only include source files (.css, .html) and no build artifacts, dependencies, or temporary files.
