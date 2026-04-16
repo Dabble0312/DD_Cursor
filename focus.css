@@ -378,7 +378,9 @@ button.btn-dim {
 /* ── chart-wrapper must be a positioning parent ── */
 .chart-wrapper {
     position: relative;
-}
+     background: #0a0f1a;
+    border-radius: var(--card-radius, 16px);
+   }
 
 /* ── Drawing overlay canvas ── */
 #overlay-canvas {
