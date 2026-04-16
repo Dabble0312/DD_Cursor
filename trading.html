@@ -8,73 +8,178 @@
         content="DojiDash Trading Mode — simulate real trades with live P&L tracking on historical candlestick data.">
     <title>DojiDash — Trading Mode</title>
     <link rel="icon" href="assets/images/Logo.gif" type="image/gif">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Design System: Dark Cinematic Theme -->
     <link rel="stylesheet" href="tokens.css">
+    <link rel="stylesheet" href="tokens-dark.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="trading.css">
+    <style>
+        /* Custom scrollbar for dark theme */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0f1a; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #334155; }
+        
+        /* Chart container override */
+        #chart { background: transparent !important; }
+        
+        /* Subtle glow effects */
+        .glow-text-green { text-shadow: var(--glow-green); }
+        .glow-text-red { text-shadow: var(--glow-red); }
+        
+        /* Button transitions */
+        .btn-trading { transition: all 0.15s ease; }
+        .btn-trading:hover { transform: translateY(-1px); }
+        .btn-trading:active { transform: translateY(0); }
+        
+        /* Panel borders with subtle gradient */
+        .panel-border {
+            border: 1px solid var(--color-border);
+            background: linear-gradient(180deg, rgba(15, 22, 35, 0.8) 0%, rgba(10, 15, 26, 0.95) 100%);
+        }
+    </style>
+</head>
 
+<body class="dark-theme">
 
-<body class="trading-body">
-
-    <div id="usernameDisplay" class="username-display-trading"></div>
-    <div id="tradingHUD" class="trading-hud">Loading...</div>
-    <div id="tradingStatus" class="trading-status"></div>
-
-    <div class="trading-layout">
-
-        <!-- Left: chart -->
-        <div>
-            <div class="chart-wrapper">
-                <div id="chart"></div>
-            </div>
-
-            <!-- Buttons below chart -->
-            <div class="trading-buttons">
-                <button id="revealBtn" class="btn-reveal-trading">REVEAL</button>
-                <button id="buyBtn" class="btn-buy">BUY</button>
-                <button id="sellBtn" class="btn-sell">SELL</button>
-                <button id="exitBtn" class="btn-exit">EXIT</button>
-                <button id="endSessionBtn" class="btn-end-session">End Session</button>
-            </div>
+    <!-- Top bar: username + session info -->
+    <header class="fixed top-0 left-0 right-0 h-14 panel-border backdrop-blur-md flex items-center justify-between px-6 z-50">
+        <div class="flex items-center gap-4">
+            <h1 class="text-lg font-bold tracking-tight">DOJIDASH</h1>
+            <span class="text-xs font-medium uppercase tracking-wider">Trading Simulation</span>
         </div>
+        <div class="flex items-center gap-6">
+            <div id="usernameDisplay" class="text-sm font-medium"></div>
+            <div id="tradingHUD" class="text-sm font-mono">Loading...</div>
+        </div>
+    </header>
 
-        <!-- Right: trade tape panel -->
-        <div class="tape-panel">
-            <div class="tape-header">Trade Tape</div>
+    <!-- Status bar below header -->
+    <div class="fixed top-14 left-0 right-0 h-10 border-b border-color-border-subtle flex items-center px-6 z-40">
+        <div id="tradingStatus" class="text-sm font-medium"></div>
+    </div>
 
-            <!-- Live open trade — large font, top of panel -->
-            <div id="liveTrade" class="hidden"></div>
+    <!-- Main layout -->
+    <div class="trading-layout pt-24 pb-20 px-4 h-screen">
+        
+        <!-- Left: Navigation / Mode Selector -->
+        <aside class="w-16 flex-shrink-0 flex flex-col items-center gap-4 py-4">
+            <button class="w-10 h-10 rounded-lg surface-card border border-color-border hover:border-color-indigo transition-colors flex items-center justify-center" title="Chart">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/>
+                </svg>
+            </button>
+            <button class="w-10 h-10 rounded-lg surface-card border border-color-border hover:border-color-indigo transition-colors flex items-center justify-center" title="Focus Mode">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                </svg>
+            </button>
+            <button class="w-10 h-10 rounded-lg surface-card border border-color-border hover:border-color-indigo transition-colors flex items-center justify-center" title="Learn">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                </svg>
+            </button>
+        </aside>
+
+        <!-- Center: Main Chart Area -->
+        <main class="flex-1 flex flex-col min-w-0">
+            <!-- Chart wrapper - the hero -->
+            <div class="chart-wrapper flex-1 panel-border rounded-xl overflow-hidden shadow-2xl">
+                <div id="chart" class="w-full h-full"></div>
+            </div>
+
+            <!-- Trading controls below chart -->
+            <div class="trading-buttons mt-4 flex items-center gap-3">
+                <button id="revealBtn" class="btn-trading px-5 py-3 rounded-lg surface-card-elevated border border-color-border font-semibold text-sm hover:bg-color-indigo hover:border-color-indigo-dark">
+                    REVEAL
+                </button>
+                <button id="buyBtn" class="btn-trading px-6 py-3 rounded-lg bg-color-emerald-dark border border-transparent font-bold text-sm hover:bg-color-emerald glow-text-green">
+                    BUY
+                </button>
+                <button id="sellBtn" class="btn-trading px-6 py-3 rounded-lg bg-color-rose-dark border border-transparent font-bold text-sm hover:bg-color-rose glow-text-red">
+                    SELL
+                </button>
+                <button id="exitBtn" class="btn-trading px-5 py-3 rounded-lg bg-color-indigo border border-transparent font-semibold text-sm hover:bg-opacity-90 disabled:opacity-30 disabled:cursor-not-allowed">
+                    EXIT
+                </button>
+                <button id="endSessionBtn" class="btn-trading px-5 py-3 rounded-lg surface-card border border-color-border font-medium text-sm ml-auto">
+                    End Session
+                </button>
+            </div>
+        </main>
+
+        <!-- Right: Narrator / Trade Tape Panel -->
+        <aside class="w-80 flex-shrink-0 flex flex-col panel-border rounded-xl overflow-hidden">
+            <!-- Header -->
+            <div class="tape-header px-4 py-3 surface-card-elevated border-b border-color-border">
+                <h2 class="text-xs font-bold uppercase tracking-widest">Trade Tape</h2>
+            </div>
+
+            <!-- Live trade card — reading assistant style -->
+            <div id="liveTrade" class="hidden px-4 py-4 surface-card/50 border-b border-color-border">
+                <!-- Dynamic content injected by JS -->
+            </div>
 
             <!-- Closed trades table -->
-            <div class="tape-table-wrap">
-                <table class="tape-table">
-                    <thead>
+            <div class="tape-table-wrap flex-1 overflow-y-auto">
+                <table class="tape-table w-full">
+                    <thead class="sticky top-0 surface-card-elevated">
                         <tr>
-                            <th>Dir</th>
-                            <th>Entry</th>
-                            <th>Exit</th>
-                            <th>P/L</th>
-                            <th>Dur</th>
+                            <th class="px-3 py-2 text-left text-[10px] font-bold uppercase tracking-wider border-b border-color-border">Dir</th>
+                            <th class="px-3 py-2 text-left text-[10px] font-bold uppercase tracking-wider border-b border-color-border">Entry</th>
+                            <th class="px-3 py-2 text-left text-[10px] font-bold uppercase tracking-wider border-b border-color-border">Exit</th>
+                            <th class="px-3 py-2 text-left text-[10px] font-bold uppercase tracking-wider border-b border-color-border">P/L</th>
+                            <th class="px-3 py-2 text-left text-[10px] font-bold uppercase tracking-wider border-b border-color-border">Dur</th>
                         </tr>
                     </thead>
-                    <tbody id="tapebody"></tbody>
+                    <tbody id="tapebody" class="text-sm">
+                        <!-- Rows injected by JS -->
+                    </tbody>
                 </table>
             </div>
 
-            <!-- Session summary — updates after each close -->
-            <div id="sessionSummary">
-                <span class="summary-empty">No trades yet</span>
+            <!-- Session summary — bottom of panel -->
+            <div id="sessionSummary" class="px-4 py-3 surface-card-elevated border-t border-color-border">
+                <span class="text-xs">No trades yet</span>
             </div>
-        </div>
+        </aside>
 
     </div>
 
-    <!-- End screen -->
-    <div id="endScreen" class="end-screen hidden">
-        <div class="end-content">
-            <h2>Session Over</h2>
-            <p></p>
-            <button id="playAgainBtn">New Session</button>
-            <button id="homeBtn">Home</button>
+    <!-- Bottom: Session Summary Bar (persistent) -->
+    <footer class="fixed bottom-0 left-0 right-0 h-12 surface-card/90 backdrop-blur-md border-t border-color-border-subtle flex items-center justify-center gap-8 px-6 z-40">
+        <div class="flex items-center gap-2">
+            <span class="text-xs font-medium uppercase tracking-wider">Trades</span>
+            <span id="summaryTrades" class="text-sm font-mono font-bold">0</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="text-xs font-medium uppercase tracking-wider">Win Rate</span>
+            <span id="summaryWinRate" class="text-sm font-mono font-bold">0%</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="text-xs font-medium uppercase tracking-wider">Total P/L</span>
+            <span id="summaryPL" class="text-sm font-mono font-bold glow-text-green">₹0.00</span>
+        </div>
+    </footer>
+
+    <!-- End screen modal -->
+    <div id="endScreen" class="end-screen hidden fixed inset-0 backdrop-blur-sm flex items-center justify-center z-[100]">
+        <div class="end-content panel-border rounded-2xl p-8 text-center max-w-md w-full mx-4 shadow-2xl">
+            <h2 class="text-2xl font-bold mb-2">Session Complete</h2>
+            <p id="endScreenContent" class="mb-6"></p>
+            <div class="flex flex-col gap-3">
+                <button id="playAgainBtn" class="btn-trading px-6 py-3 rounded-lg bg-color-emerald font-bold hover:bg-color-emerald-dark">
+                    New Session
+                </button>
+                <button id="homeBtn" class="btn-trading px-6 py-3 rounded-lg surface-card border border-color-border font-medium hover:border-color-secondary">
+                    Home
+                </button>
+            </div>
         </div>
     </div>
 

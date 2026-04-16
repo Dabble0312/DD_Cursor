@@ -1,5 +1,14 @@
 /* trading.css — Trading Mode specific styles.
-   Loaded after tokens.css and styles.css in trading.html. */
+   Loaded after tokens.css, tokens-dark.css, and styles.css in trading.html. */
+
+/* ── Utility Classes for Dark Theme ── */
+.surface-card {
+    background-color: var(--color-surface);
+}
+
+.surface-card-elevated {
+    background-color: var(--color-surface-elevated);
+}
 
 /* ── Two-column layout ── */
 .trading-layout {
@@ -120,12 +129,32 @@
 
 button.btn-dim { opacity: 0.35; cursor: not-allowed; }
 
+/* ── Text colors for dark theme ── */
+body.dark-theme,
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme p,
+body.dark-theme span,
+body.dark-theme th,
+body.dark-theme td {
+    color: var(--color-text-primary);
+}
+
+body.dark-theme .text-secondary {
+    color: var(--color-text-secondary);
+}
+
+body.dark-theme .text-tertiary {
+    color: var(--color-text-tertiary);
+}
+
 /* ── End screen ── */
 .end-screen {
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background: rgba(15,23,42,0.92);
+    background: rgba(3, 6, 10, 0.95);
     display: flex;
     justify-content: center;
     align-items: center;

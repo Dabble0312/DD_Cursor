@@ -171,7 +171,7 @@ function resetSession() {
 
     clearLiveTrade();
     clearTapeRows();
-    updateSessionSummary();
+    updateSessionSummary(); updateBottomSummary();
     transitionTo(STATE.BROWSING);
 }
 
@@ -298,7 +298,7 @@ function exitTrade() {
     // Move live trade card to the tape as a closed row
     clearLiveTrade();
     addClosedTapeRow(activeTrade);
-    updateSessionSummary();
+    updateSessionSummary(); updateBottomSummary();
 
     activeTrade = null;
     transitionTo(STATE.REVIEWING);
@@ -329,7 +329,7 @@ function endSession() {
         ? Math.min(...tradeHistory.map(t => t.pl)) : 0;
 
     // Use shared color constants
-    const plColor = totalPL >= 0 ? CANDLE_UP_COLOR : CANDLE_DOWN_COLOR;
+    const plColor = totalPL >= 0 ? '#10b981' : '#ef4444';
 
     resultText.innerHTML =
         `<strong>Session Complete</strong><br><br>` +
@@ -337,8 +337,8 @@ function endSession() {
         `Win rate: <strong>${winRate}%</strong><br>` +
         `Total P/L: <strong style="color:${plColor}">` +
         `${totalPL >= 0 ? '+' : ''}₹${totalPL.toFixed(2)}</strong><br>` +
-        `Best trade: <strong style="color:${CANDLE_UP_COLOR}">+₹${best.toFixed(2)}</strong><br>` +
-        `Worst trade: <strong style="color:${CANDLE_DOWN_COLOR}">₹${worst.toFixed(2)}</strong>`;
+        `Best trade: <strong style="color:#10b981">+₹${best.toFixed(2)}</strong><br>` +
+        `Worst trade: <strong style="color:#ef4444">₹${worst.toFixed(2)}</strong>`;
 
     endScreen.classList.remove('hidden');
 
@@ -358,25 +358,39 @@ function showLiveTrade(trade) {
     const el = document.getElementById('liveTrade');
     if (!el) return;
     el.classList.remove('hidden');
-    updateLiveTrade(trade);
-}
 
 function updateLiveTrade(trade) {
     const el = document.getElementById('liveTrade');
     if (!el) return;
 
-    const plColor = trade.pl >= 0 ? CANDLE_UP_COLOR : CANDLE_DOWN_COLOR;
-    const dirColor = trade.direction === 'BUY' ? CANDLE_UP_COLOR : CANDLE_DOWN_COLOR;
+    const plColor = trade.pl >= 0 ? '#10b981' : '#ef4444';
+    const dirColor = trade.direction === 'BUY' ? '#10b981' : '#ef4444';
 
     el.innerHTML = `
-        <div class="live-direction" style="color:${dirColor}">${trade.direction}</div>
-        <div class="live-entry">Entry: ₹${trade.entryPrice.toFixed(2)}</div>
-        <div class="live-price">₹${trade.currentPrice.toFixed(2)}</div>
-        <div class="live-pl" style="color:${plColor}">
-            ${trade.pl >= 0 ? '+' : ''}₹${trade.pl.toFixed(2)}
-            (${trade.plPct >= 0 ? '+' : ''}${trade.plPct.toFixed(2)}%)
+        <div class="flex flex-col gap-2">
+            <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase tracking-wider" style="color:${dirColor}">${trade.direction}</span>
+                <span class="text-xs font-mono text-trading-text-tertiary">${trade.duration} bars</span>
+            </div>
+            <div class="text-2xl font-bold font-mono text-trading-text-primary">₹${trade.currentPrice.toFixed(2)}</div>
+            <div class="flex items-baseline gap-2">
+                <span class="text-lg font-bold font-mono" style="color:${plColor}">
+                    ${trade.pl >= 0 ? '+' : ''}₹${trade.pl.toFixed(2)}
+                </span>
+                <span class="text-sm font-mono" style="color:${plColor}">
+                    (${trade.plPct >= 0 ? '+' : ''}${trade.plPct.toFixed(2)}%)
+                </span>
+            </div>
+            <div class="text-xs text-trading-text-tertiary">Entry: ₹${trade.entryPrice.toFixed(2)}</div>
         </div>
-        <div class="live-duration">${trade.duration} bar${trade.duration !== 1 ? 's' : ''}</div>
+    `;
+}
+                <span class="text-sm font-mono" style="color:${plColor}">
+                    (${trade.plPct >= 0 ? '+' : ''}${trade.plPct.toFixed(2)}%)
+                </span>
+            </div>
+            <div class="text-xs text-trading-text-tertiary">Entry: ₹${trade.entryPrice.toFixed(2)}</div>
+        </div>
     `;
 }
 
@@ -392,8 +406,8 @@ function addClosedTapeRow(trade) {
     const tbody = document.getElementById('tapebody');
     if (!tbody) return;
 
-    const plColor = trade.pl >= 0 ? CANDLE_UP_COLOR : CANDLE_DOWN_COLOR;
-    const dirColor = trade.direction === 'BUY' ? CANDLE_UP_COLOR : CANDLE_DOWN_COLOR;
+    const plColor = trade.pl >= 0 ? '#10b981' : '#ef4444';
+    const dirColor = trade.direction === 'BUY' ? '#10b981' : '#ef4444';
     const plSign = trade.pl >= 0 ? '+' : '';
 
     const row = document.createElement('tr');
@@ -434,7 +448,7 @@ function updateSessionSummary() {
 
     const totalPL = tradeHistory.reduce((sum, t) => sum + t.pl, 0);
     const wins = tradeHistory.filter(t => t.pl > 0).length;
-    const plColor = totalPL >= 0 ? CANDLE_UP_COLOR : CANDLE_DOWN_COLOR;
+    const plColor = totalPL >= 0 ? '#10b981' : '#ef4444';
     const plSign = totalPL >= 0 ? '+' : '';
 
     el.innerHTML = `
@@ -485,3 +499,24 @@ window.addEventListener('DOMContentLoaded', () => {
 
     loadTradingBlock();
 });
+/* -----------------------------------------
+   15. UPDATE BOTTOM SUMMARY BAR
+----------------------------------------- */
+function updateBottomSummary() {
+    const tradesEl = document.getElementById('summaryTrades');
+    const winRateEl = document.getElementById('summaryWinRate');
+    const plEl = document.getElementById('summaryPL');
+    
+    if (!tradesEl || !winRateEl || !plEl) return;
+    
+    const totalTrades = tradeHistory.length;
+    const wins = tradeHistory.filter(t => t.pl > 0).length;
+    const winRate = totalTrades > 0 ? Math.round((wins / totalTrades) * 100) : 0;
+    const totalPL = tradeHistory.reduce((sum, t) => sum + t.pl, 0);
+    const plColor = totalPL >= 0 ? '#10b981' : '#ef4444';
+    
+    tradesEl.textContent = totalTrades;
+    winRateEl.textContent = winRate + '%';
+    plEl.textContent = (totalPL >= 0 ? '+' : '') + '₹' + totalPL.toFixed(2);
+    plEl.style.color = plColor;
+}
