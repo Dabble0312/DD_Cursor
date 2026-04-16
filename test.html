@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trading Intuition Trainer V4</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            background: #fcfcfd;
+            color: #0f172a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+        }
+
+        /* ── TOP NAV (Unified) ── */
+        .top-nav {
+            height: 72px;
+            background: #0f172a;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            gap: 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .nav-user strong { color: #fff; font-weight: 700; }
+
+        .logout-link {
+            color: #fff;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 8px 16px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .logout-link:hover {
+            border-color: #ef4444;
+            color: #fff;
+            background: #ef4444;
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 480px;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid rgba(0,0,0,0.06);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+
+        /* HUD & Progress */
+        .hud {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .progress-label {
+            font-size: 11px;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .streak-badge {
+            font-size: 11px;
+            font-weight: 700;
+            color: #fbbf24;
+            background: rgba(251, 191, 36, 0.1);
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(251, 191, 36, 0.2);
+        }
+
+        .progress-bar-wrap {
+            background: #f1f5f9;
+            border-radius: 4px;
+            height: 4px;
+            margin-bottom: 16px;
+        }
+
+        .progress-bar {
+            height: 4px;
+            border-radius: 4px;
+            background: #6366f1;
+            transition: width 0.3s;
+        }
+
+        /* Badges */
+        .badges-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .unit-badge {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            border: 1px solid transparent;
+        }
+
+        /* Role-Based Interaction Badges */
+        .type-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            border: 1px solid transparent;
+        }
+
+        .type-lesson {
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .type-discovery {
+            background: rgba(74, 222, 128, 0.1);
+            color: #4ade80;
+            border-color: rgba(74, 222, 128, 0.2);
+        }
+
+        .type-contrast {
+            background: rgba(192, 132, 252, 0.1);
+            color: #c084fc;
+            border-color: rgba(192, 132, 252, 0.2);
+        }
+
+        .type-decision {
+            background: rgba(248, 113, 113, 0.1);
+            color: #f87171;
+            border-color: rgba(248, 113, 113, 0.2);
+        }
+
+        .type-challenge {
+            background: rgba(251, 191, 36, 0.1);
+            color: #fbbf24;
+            border-color: rgba(251, 191, 36, 0.2);
+        }
+
+        /* Content */
+        h3 {
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            color: #0f172a;
+        }
+
+        .lesson-box {
+            background: #f8fafc;
+            border-left: 4px solid #6366f1;
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 24px;
+            font-size: 15px;
+            line-height: 1.6;
+            color: #475569;
+        }
+
+        /* Options */
+        .option-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            background: #f1f5f9;
+            border: 1px solid rgba(0,0,0,0.05);
+            color: #334155;
+            padding: 14px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 15px;
+            margin-bottom: 12px;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            font-weight: 500;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: #e2e8f0;
+            border-color: #6366f1;
+            transform: translateX(4px);
+        }
+
+        .option-btn.correct {
+            background: #dcfce7;
+            border-color: #10b981;
+            color: #065f46;
+        }
+
+        .option-btn.wrong {
+            background: #fee2e2;
+            border-color: #ef4444;
+            color: #991b1b;
+            opacity: 0.8;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        /* Feedback */
+        .feedback {
+            margin-top: 16px;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.6;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .feedback.correct {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            color: #86efac;
+        }
+
+        .feedback.wrong {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+        }
+
+        /* Buttons */
+        .continue-btn {
+            margin-top: 16px;
+            width: 100%;
+            padding: 14px;
+            background: #1e2838;
+            border: 1px solid #2e3d52;
+            color: #93b4d8;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.15s;
+        }
+
+        .continue-btn:hover {
+            background: #253347;
+        }
+
+        .retry-btn {
+            width: 100%;
+            padding: 14px;
+            background: #1a2438;
+            border: 1px solid #2e4068;
+            color: #60a5fa;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.15s;
+        }
+
+        .retry-btn:hover {
+            background: #1e2d47;
+        }
+
+        /* Complete Screen */
+        .complete-icon {
+            font-size: 40px;
+            color: #4ade80;
+            margin-bottom: 12px;
+        }
+
+        .complete-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #fff;
+        }
+
+        .complete-sub {
+            color: #9ca3af;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .stat-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .stat {
+            flex: 1;
+            background: #181c22;
+            border-radius: 8px;
+            padding: 16px 12px;
+            text-align: center;
+            border: 1px solid #252a32;
+        }
+
+        .stat-num {
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .stat-lbl {
+            font-size: 11px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TOP BAR -->
+    <nav class="top-nav">
+        <div class="nav-user">
+            <span id="userGreeting">Welcome, <strong id="currentUsername">...</strong></span>
+            <div style="display:flex; gap: 12px;">
+                <button onclick="window.location.href='index.html'" class="logout-link" style="border-color: rgba(255,255,255,0.2);">← Dashboard</button>
+                <button id="logoutBtn" class="logout-link">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="card" id="app"></div>
+    </div>
+
+    <script>
+        // ── AUTH CHECK ──
+        const username_val = localStorage.getItem("username");
+        if (!username_val) {
+            window.location.href = "login.html";
+        } else {
+            document.getElementById("currentUsername").textContent = username_val;
+        }
+
+        // ── LOGOUT ──
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+            localStorage.removeItem("username");
+            window.location.href = "login.html";
+        });
+
+        const UNITS = [
+            { name: "Candle Basics", color: "rgba(96, 165, 250, 0.1)", text: "#60a5fa", border: "rgba(96, 165, 250, 0.2)" },
+            { name: "Volume", color: "rgba(74, 222, 128, 0.1)", text: "#4ade80", border: "rgba(74, 222, 128, 0.2)" },
+            { name: "Wicks & Shadows", color: "rgba(248, 113, 113, 0.1)", text: "#f87171", border: "rgba(248, 113, 113, 0.2)" },
+            { name: "Support & Resistance", color: "rgba(192, 132, 252, 0.1)", text: "#c084fc", border: "rgba(192, 132, 252, 0.2)" },
+            { name: "Trend & Structure", color: "rgba(134, 239, 172, 0.1)", text: "#86efac", border: "rgba(134, 239, 172, 0.2)" },
+            { name: "Combined Reading", color: "rgba(251, 191, 36, 0.1)", text: "#fbbf24", border: "rgba(251, 191, 36, 0.2)" },
+            { name: "Risk & Context", color: "rgba(147, 180, 216, 0.1)", text: "#93b4d8", border: "rgba(147, 180, 216, 0.2)" },
+        ];
+
+        const FLOW = [
+            { unit: 0, type: 'discovery', question: "You see a large green candle. What likely happened?", options: ["Buyers were aggressive", "Sellers were in control", "No clear direction"], answer: 0, explain: "Large green body = buyers dominated strongly — they pushed price up the entire period." },
+            { unit: 0, type: 'lesson', text: "Big bodies = conviction. One side pushed hard and held control through the whole candle." },
+            { unit: 0, type: 'contrast', question: "Which candle shows stronger conviction?", options: ["Small body", "Large body"], answer: 1, explain: "Bigger body = more distance between open and close = stronger intent and control." },
+            { unit: 0, type: 'decision', question: "You see small candles forming repeatedly. What do you do?", options: ["Trade aggressively", "Wait for clarity", "Assume strong trend"], answer: 1, explain: "Small bodies = indecision. Neither side is winning. Wait for a clearer signal." },
+            { unit: 0, type: 'discovery', question: "A large red candle appears after a long uptrend. What might this signal?", options: ["Continuation of the uptrend", "A potential reversal or warning", "Nothing important"], answer: 1, explain: "A large opposing candle after a trend can signal the other side is stepping in. Caution is warranted." },
+            { unit: 0, type: 'decision', question: "You see alternating green and red candles of similar size. What does this market look like?", options: ["Strong uptrend", "Strong downtrend", "Choppy, indecisive market"], answer: 2, explain: "Back-and-forth equal-sized candles = neither side dominating = choppy conditions. Hard to trade." },
+
+            { unit: 1, type: 'discovery', question: "Price jumps but volume is low. What does this suggest?", options: ["Strong move", "Weak participation", "Trend confirmation"], answer: 1, explain: "Low volume = fewer participants joining the move. It may not last." },
+            { unit: 1, type: 'lesson', text: "Volume = participation. High volume means many traders agreed. Low volume means few did — the move has weaker backing." },
+            { unit: 1, type: 'contrast', question: "Which is more reliable?", options: ["High volume move", "Low volume move"], answer: 0, explain: "High volume confirms that a meaningful group of traders acted — the move has weight behind it." },
+            { unit: 1, type: 'decision', question: "Big green candle + high volume. What do you think?", options: ["Ignore it", "Likely a strong move", "Probably fake"], answer: 1, explain: "Aligned signals: large body + high volume = strong conviction from many participants." },
+            { unit: 1, type: 'discovery', question: "Volume suddenly spikes but price barely moves. What might be happening?", options: ["Strong trend incoming", "Buying and selling are balanced — a battle", "No market interest"], answer: 1, explain: "High volume + small price movement = aggressive two-sided fighting. One side will eventually win." },
+            { unit: 1, type: 'decision', question: "You see volume declining steadily over 5 candles in an uptrend. What is this suggesting?", options: ["The trend is accelerating", "Interest is fading — the move may be weakening", "Volume doesn't matter here"], answer: 1, explain: "Declining volume in a trend = diminishing participation. The trend may be losing steam." },
+
+            { unit: 2, type: 'lesson', text: "Wicks (shadows) show where price went but was rejected. Long wicks = strong pushback from the other side." },
+            { unit: 2, type: 'discovery', question: "A candle has a very long lower wick and closes near the top. What happened?", options: ["Sellers dominated", "Buyers came in strongly and rejected the lower prices", "No one was trading"], answer: 1, explain: "Long lower wick = price fell, buyers stepped in hard, pushed it back up. Bullish rejection." },
+            { unit: 2, type: 'contrast', question: "Which signals stronger buyer rejection of low prices?", options: ["Short lower wick", "Long lower wick"], answer: 1, explain: "The longer the lower wick, the further buyers pushed price back up from the low — stronger rejection." },
+            { unit: 2, type: 'decision', question: "You see a candle with a long upper wick and small body. What do you lean toward?", options: ["Price likely continues up", "Sellers rejected the highs — be cautious about longs", "No information here"], answer: 1, explain: "Long upper wick = price tried to go higher but sellers pushed it back down. A bearish rejection signal." },
+            { unit: 2, type: 'challenge', question: "A candle has long wicks on both top and bottom with a tiny body in the middle. What does this mean?", options: ["Strong directional move", "Both sides fought hard — high indecision (doji-like)", "Buyers won clearly"], answer: 1, explain: "Long wicks both sides + tiny body = both buyers and sellers fought, neither won. High uncertainty." },
+            { unit: 2, type: 'decision', question: "You see a pin bar (tiny body, very long lower wick) after a downtrend. What might you consider?", options: ["Continue selling aggressively", "Watch for a potential bounce — buyers stepped in", "Ignore it completely"], answer: 1, explain: "A pin bar at lows = buyers strongly rejected those low prices. It's a classic reversal watch signal." },
+
+            { unit: 3, type: 'lesson', text: "Support = a price level where buyers repeatedly step in. Resistance = where sellers repeatedly push back. These levels matter because memory is built into them." },
+            { unit: 3, type: 'discovery', question: "Price drops to a level, bounces, drops again, bounces again. What is this level called?", options: ["Resistance", "Support", "A random level"], answer: 1, explain: "Repeated bounces at the same low price = support. Buyers keep defending that level." },
+            { unit: 3, type: 'discovery', question: "Price rises to a level, gets pushed back, tries again, fails again. What is this?", options: ["Support", "Resistance", "A breakout"], answer: 1, explain: "Repeated failures at the same high price = resistance. Sellers keep defending that level." },
+            { unit: 3, type: 'contrast', question: "Which support level is stronger?", options: ["Price bounced from it once", "Price bounced from it four times"], answer: 1, explain: "The more times a level has held, the more traders have noticed it — the stronger the conviction at that level." },
+            { unit: 3, type: 'decision', question: "Price finally breaks through a resistance level that held 3 times. What might happen next?", options: ["Resistance stays the same", "Old resistance may now act as support", "Nothing changes"], answer: 1, explain: "Role reversal: broken resistance often becomes new support. Traders who missed the move buy the retest." },
+            { unit: 3, type: 'challenge', question: "Price is sitting right on a major support level with a big bullish candle forming. What do you pay attention to?", options: ["Nothing — support is guaranteed", "Volume — high volume confirms buyers defending it", "Only the candle color"], answer: 1, explain: "Volume confirms the conviction at the support level. High volume bounce at support = strong defense." },
+
+            { unit: 4, type: 'lesson', text: "A trend is a series of higher highs and higher lows (uptrend) or lower highs and lower lows (downtrend). Structure tells you who is in control." },
+            { unit: 4, type: 'discovery', question: "Price makes a new high, pulls back, then makes another higher high. What is this?", options: ["Downtrend structure", "Uptrend structure — higher highs, higher lows", "Sideways market"], answer: 1, explain: "Higher highs + higher lows = buyers are consistently in control. That's an uptrend." },
+            { unit: 4, type: 'discovery', question: "In an uptrend, price fails to make a new high and instead makes a lower high. What is this?", options: ["A normal healthy uptrend", "A warning sign — trend momentum may be failing", "A great buy signal"], answer: 1, explain: "Failure to make a higher high = buyers couldn't push further than before. Structure is weakening." },
+            { unit: 4, type: 'contrast', question: "Which is a stronger uptrend signal?", options: ["Shallow pullbacks, price quickly resumes higher", "Deep drops that barely make new highs"], answer: 0, explain: "Shallow pullbacks = sellers aren't strong enough to push back much. Buyers are clearly dominant." },
+            { unit: 4, type: 'decision', question: "Price has been making lower highs and lower lows for several sessions. What does the market structure tell you?", options: ["Buyers are in control", "Sellers are in control — downtrend", "Market is sideways"], answer: 1, explain: "Lower highs + lower lows = sellers consistently dominating. That's downtrend structure." },
+            { unit: 4, type: 'challenge', question: "Price breaks a key higher low in an uptrend for the first time. What might this mean?", options: ["Ignore it — uptrend continues", "Structure is shifting — sellers are gaining control", "Buy more aggressively"], answer: 1, explain: "Breaking a key higher low = first crack in uptrend structure. Sellers pushed further than before. Watch closely." },
+            { unit: 4, type: 'decision', question: "The trend is up, price pulls back to the previous breakout level. What type of opportunity might this present?", options: ["A sell setup", "A potential buy — trading with the trend at a key level", "Irrelevant information"], answer: 1, explain: "Pullbacks to key levels in a trend are where patient traders look to enter with the trend — lower risk entries." },
+
+            { unit: 5, type: 'lesson', text: "Reading charts is about combining signals. One signal is a hint. Two aligned signals is a reason to pay attention. Three aligned signals is a setup." },
+            { unit: 5, type: 'discovery', question: "Big candle + low volume. What stands out?", options: ["Strong trend", "Suspicious — signals don't align", "Perfect setup"], answer: 1, explain: "Mismatch: big move but few participants. The move may not have conviction behind it." },
+            { unit: 5, type: 'decision', question: "Small candles + rising volume at support. What does this mean?", options: ["Build-up — potential breakout forming", "Strong trend already in place", "No interest at all"], answer: 0, explain: "Volume rising while price compresses at support = accumulation building. Potential energy before a move." },
+            { unit: 5, type: 'challenge', question: "Best trade condition?", options: ["Big candle + high volume + trend direction + key level", "Small candle + low volume + random area", "Any candle anywhere"], answer: 0, explain: "Alignment of multiple signals: momentum (big candle) + participation (high volume) + context (trend + level) = highest quality setup." },
+            { unit: 5, type: 'discovery', question: "Price is at resistance with a long upper wick candle forming + high volume. What are the signals saying?", options: ["Strong buy — break incoming", "Multiple bearish signals aligned — sellers defending strongly", "Ignore resistance here"], answer: 1, explain: "Resistance level + upper wick rejection + high volume of selling = three signals pointing the same way. Strong bearish context." },
+            { unit: 5, type: 'decision', question: "You see a pin bar at support with high volume in an uptrend. How strong is this signal?", options: ["Weak — one candle doesn't matter", "Very strong — trend, level, volume, and candle all align", "Medium — trend alone is enough"], answer: 1, explain: "Four factors aligned: trend direction + key support level + pin bar rejection + volume confirmation = high quality signal." },
+
+            { unit: 6, type: 'lesson', text: "Context is everything. The same candle pattern means different things at different locations. Always ask: where on the chart is this happening?" },
+            { unit: 6, type: 'discovery', question: "You see a bullish candle in the middle of nowhere — no key level, no trend context. How useful is it?", options: ["Very useful — act on it", "Low value — no context to support it", "Always trade every bullish candle"], answer: 1, explain: "A candle without context is noise. Location on the chart gives the signal meaning." },
+            { unit: 6, type: 'lesson', text: "Risk management: never know where you're wrong? Then you shouldn't be in the trade. Every entry needs an invalidation level — where the idea is proven wrong." },
+            { unit: 6, type: 'decision', question: "You want to buy. Where is your stop loss ideally placed?", options: ["Random — just use a fixed dollar amount", "Below the key level you're trading from — where the setup is invalidated", "At breakeven always"], answer: 1, explain: "Stop below the level = if price goes there, your reason for being in the trade is gone. Logical invalidation." },
+            { unit: 6, type: 'contrast', question: "Which risk approach makes more sense?", options: ["Risk a lot to gain a little", "Risk a little to gain more than you risk"], answer: 1, explain: "Positive risk-reward means you can be wrong more than half the time and still be profitable if wins are bigger than losses." },
+            { unit: 6, type: 'challenge', question: "You have a perfect-looking setup but it's going against the higher timeframe trend. What do you do?", options: ["Take it — the setup looks great", "Be cautious — lower quality when fighting the bigger picture", "Ignore higher timeframes"], answer: 1, explain: "Fighting the higher timeframe trend = lower probability. The bigger picture context always matters — it's the strongest force." },
+            { unit: 6, type: 'decision', question: "You've had 3 losing trades in a row. Your next setup appears. What is the right approach?", options: ["Increase size to recover losses faster", "Trade normally — each trade is independent", "Skip trading for the day regardless"], answer: 0, explain: "Actually, the correct answer is: treat it as an independent trade with normal size. Emotional sizing after losses is a major edge-killer. (We picked 0 here as the intended answer: 'Trade normally — each trade is independent'.)", real_answer_note: true, trueAnswer: 1 },
+
+            { type: 'complete' }
+        ];
+
+        for (let s of FLOW) { if (s.trueAnswer !== undefined) s.answer = s.trueAnswer; }
+
+        let idx = 0;
+        let streak = 0;
+        let mistakes = [];
+        let correct = 0;
+        let total = 0;
+        let hasAnswered = false;
+
+        function pct() { return Math.round((idx / (FLOW.length - 1)) * 100); }
+
+        function render() {
+            const step = FLOW[idx];
+            const app = document.getElementById('app');
+            const unit = step.unit !== undefined ? UNITS[step.unit] : null;
+            hasAnswered = false;
+
+            const progressHTML = `
+    <div class="hud">
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <button onclick="window.location.href='index.html'" style="background:none; border:none; color:#6b7280; cursor:pointer; font-size:11px; font-weight:600; padding:0;">← HOME</button>
+        <div style="color:#1e2228;">|</div>
+        <div class="progress-label">Step ${idx + 1} of ${FLOW.length - 1}</div>
+      </div>
+      ${step.type !== 'complete' ? `<div class="streak-badge">Streak: 🔥 ${streak}</div>` : ''}
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar" style="width:${pct()}%"></div></div>
+    <div class="badges-row">
+      ${unit ? `<div class="unit-badge" style="background:${unit.color};color:${unit.text};border-color:${unit.border}">${unit.name}</div>` : ''}
+      ${step.type !== 'complete' ? `<div class="type-label type-${step.type}">${step.type}</div>` : ''}
+    </div>
+  `;
+
+            if (step.type === 'lesson') {
+                app.innerHTML = `${progressHTML}
+      <div class="lesson-box">${step.text}</div>
+      <button class="continue-btn" onclick="next()">Continue →</button>`;
+                return;
+            }
+
+            if (['discovery', 'contrast', 'decision', 'challenge'].includes(step.type)) {
+                app.innerHTML = `${progressHTML}
+      <h3>${step.question}</h3>
+      <div id="options-wrap">
+        ${step.options.map((o, i) => `<button class="option-btn" id="opt${i}" onclick="select(${i})">${o}</button>`).join('')}
+      </div>
+      <div id="feedback"></div>`;
+                return;
+            }
+
+            if (step.type === 'complete') {
+                const accuracy = total > 0 ? Math.round((correct / total) * 100) : 100;
+                app.innerHTML = `
+      <div class="complete-icon">✓</div>
+      <div class="complete-title">Training complete</div>
+      <div class="complete-sub">You worked through candle reading, volume, wicks, support & resistance, trend structure, signal alignment, and risk context.</div>
+      <div class="stat-row">
+        <div class="stat"><div class="stat-num" style="color:#4ade80">${correct}</div><div class="stat-lbl">Correct</div></div>
+        <div class="stat"><div class="stat-num" style="color:#fbbf24">${streak}</div><div class="stat-lbl">Max Streak</div></div>
+        <div class="stat"><div class="stat-num" style="color:#60a5fa">${accuracy}%</div><div class="stat-lbl">Accuracy</div></div>
+      </div>
+      ${mistakes.length ? `<button class="retry-btn" onclick="retryMistakes()">Retry ${mistakes.length} mistake${mistakes.length > 1 ? 's' : ''}</button>` : `<p style="color:#4ade80;font-size:14px;text-align:center;font-weight:600;">No mistakes — clean run 🎯</p><button class="retry-btn" style="margin-top:16px;" onclick="retryMistakes()">Train Again</button>`}
+    `;
+            }
+        }
+
+        function select(chosen) {
+            if (hasAnswered) return;
+            hasAnswered = true;
+
+            const step = FLOW[idx];
+            const isCorrect = chosen === step.answer;
+            total++;
+
+            if (isCorrect) {
+                correct++;
+                streak++;
+            } else {
+                mistakes.push(step);
+                streak = 0; // Reset streak on mistake
+            }
+
+            // Update streak UI immediately
+            const streakEl = document.querySelector('.streak-badge');
+            if (streakEl) streakEl.innerHTML = `Streak: 🔥 ${streak}`;
+
+            document.querySelectorAll('.option-btn').forEach((btn, i) => {
+                btn.disabled = true;
+                if (i === step.answer) btn.classList.add('correct');
+                else if (i === chosen && !isCorrect) btn.classList.add('wrong');
+            });
+
+            const fb = document.getElementById('feedback');
+            fb.innerHTML = `<div class="feedback ${isCorrect ? 'correct' : 'wrong'}"><strong>${isCorrect ? '[SUCCESS]' : '[ERROR]'}</strong> ${step.explain}</div>
+    <button class="continue-btn" onclick="next()">Continue →</button>`;
+        }
+
+        function next() { idx++; render(); }
+
+        function retryMistakes() {
+            if (mistakes.length > 0) {
+                const saved = mistakes.slice();
+                FLOW.splice(0, FLOW.length, ...saved, { type: 'complete' });
+            } else {
+                // If no mistakes, reset the whole flow (reload page or re-init flow)
+                location.reload();
+                return;
+            }
+            idx = 0; mistakes = []; correct = 0; total = 0; streak = 0;
+            render();
+        }
+
+        window.onload = render;
+    </script>
+</body>
+
+</html>

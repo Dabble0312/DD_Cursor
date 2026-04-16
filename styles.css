@@ -1,0 +1,290 @@
+/* tokens.css defines all :root variables — link it before this file */
+
+/* --- BASE STYLES --- */
+body {
+  background-color: var(--color-bg);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--color-text-primary);
+  margin: 0;
+  padding: var(--space-lg);
+  overflow-x: hidden;
+}
+
+/* --- HOME PAGE CONTAINER --- */
+.home-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.home-logo {
+  width: var(--logo-width);
+  display: block;
+  margin-bottom: var(--space-xl);
+  animation: fadeIn var(--animation-fade);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(var(--space-xs)); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.username-input {
+    padding: var(--space-md);
+    width: var(--input-width);
+    border-radius: var(--button-radius);
+    border: 1px solid rgba(0,0,0,0.1);
+    margin-bottom: var(--space-md);
+    font-size: var(--font-body);
+    outline: none;
+}
+
+/* --- CHART & GAME HUD --- */
+#chart {
+  width: 100%;
+  height: *var(--chart-height);
+  background: white;
+  border-radius: var(--card-radius);
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  overflow: visible;
+}
+
+.username-display { font-weight: var(--font-weight-regular); color: var(--color-text-secondary); font-size: 0.9rem; }
+.streak-display { font-size: 1.5rem; color: var(--color-text-primary); font-weight: 800; }
+.best-display { font-size: var(--font-caption); color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: var(--space-lg); }
+
+/* --- BUTTONS --- */
+button {
+  padding: var(--space-md) var(--space-xl);
+  border: none;
+  border-radius: var(--button-radius);
+  font-size: var(--font-body);
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+button.up { background: var(--color-emerald); color: white; margin-right: var(--space-sm); }
+button.down { background: var(--color-rose); color: white; }
+
+button:hover {
+  transform: translateY(calc(var(--space-xxs) * -0.5));
+  filter: brightness(1.1);
+}
+
+button:active { transform: translateY(calc(var(--space-xxs) * 0.25)); }
+
+/* --- POPUPS & MODALS --- */
+.hidden {
+    display: none !important;
+}
+
+/* Result Popup (UP/DOWN correctness) */
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  padding: var(--space-lg) calc(var(--space-lg) * 2);
+  border-radius: var(--modal-radius);
+  font-size: var(--font-h1);
+  font-weight: 800;
+  color: white;
+  opacity: 0;
+  pointer-events: none;
+  transition: var(--transition-smooth);
+  z-index: 9999;
+  backdrop-filter: blur(8px);
+}
+
+.popup.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  display: block !important;
+}
+
+.popup.correct { background-color: rgba(16, 185, 129, 0.9); }
+.popup.wrong   { background-color: rgba(239, 68, 68, 0.9); }
+
+/* WSB / Mascot Roast Box */
+.wsb-popup {
+  position: fixed;
+  bottom: var(--space-lg);
+  right: var(--space-lg);
+  width: var(--wsb-width);
+  background: white;
+  padding: var(--space-md);
+  border-radius: var(--card-radius);
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  z-index: 9999;
+  opacity: 0;
+  transform: translateX(var(--space-lg));
+  transition: var(--transition-ease);
+  pointer-events: none;
+}
+
+.wsb-popup.show {
+  opacity: 1;
+  transform: translateX(0);
+  display: flex !important;
+}
+
+.wsb-emoji { width: calc(var(--space-lg) * 3.3); height: auto; }
+.wsb-text { font-weight: var(--font-weight-bold); font-size: 0.9rem; color: #1e293b; }
+
+/* --- END SCREEN --- */
+.end-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999;
+}
+
+.end-content {
+    background: white;
+    padding: var(--space-xl);
+    border-radius: var(--modal-radius);
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    color: var(--text-main);
+}
+
+#playAgainBtn { background: var(--emerald); color: white; width: 100%; margin-bottom: var(--space-sm); }
+#homeBtn { background: #64748b; color: white; width: 100%; }
+
+/* --- CHART ANIMATION --- */
+@keyframes flash {
+  0%   { box-shadow: 0 0 0px transparent; }
+  50%  { box-shadow: 0 0 30px rgba(255, 215, 0, 0.4); }
+  100% { box-shadow: 0 0 0px transparent; }
+}
+
+.flash-candles {
+  animation: flash var(--animation-flash);
+}
+
+/* --- LOADING SPINNER --- */
+.chart-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--chart-height);
+  color: var(--color-text-tertiary);
+  font-size: var(--font-caption);
+  letter-spacing: 0.04em;
+  gap: var(--space-sm);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(0,0,0,0.08);
+  border-top-color: var(--color-indigo);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+/* --- HOME PAGE BUTTON VARIANTS --- */
+/* btn-focus, btn-trading, btn-learn replace inline style= on index.html */
+.btn-home {
+  background: var(--color-emerald);
+  color: white;
+  display: block;
+  width: var(--input-width);
+  margin-bottom: var(--space-xs);
+}
+
+.btn-focus {
+  background: var(--color-indigo);
+  color: white;
+  display: block;
+  width: var(--input-width);
+  margin-bottom: var(--space-xs);
+}
+
+.btn-trading {
+  background: var(--color-slate);
+  color: white;
+  display: block;
+  width: var(--input-width);
+  margin-bottom: var(--space-xs);
+}
+
+.btn-learn {
+  background: var(--color-teal);
+  color: white;
+  display: block;
+  width: var(--input-width);
+  margin-bottom: var(--space-xs);
+}
+
+.btn-secondary {
+  background: none;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  display: block;
+  width: var(--input-width);
+  margin-bottom: var(--space-xs);
+}
+
+/* --- USER PROFILE HEADER --- */
+.user-profile {
+    position: fixed;
+    top: var(--space-md);
+    right: var(--space-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    background: white;
+    padding: var(--space-xs) var(--space-md);
+    border-radius: 100px;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    z-index: 1000;
+}
+
+.user-profile span {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+}
+
+.btn-logout {
+    margin-left: var(--space-xs);
+    background: transparent;
+    padding: var(--space-xxs) var(--space-xs);
+    font-size: 11px;
+    border: 1px solid var(--color-border);
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: var(--transition-fast);
+}
+
+.btn-logout:hover {
+    border-color: var(--color-rose);
+    color: var(--color-rose);
+    background: rgba(239, 68, 68, 0.05);
+}

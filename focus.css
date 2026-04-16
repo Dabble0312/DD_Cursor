@@ -1,0 +1,566 @@
+/* focus.css — Focus Mode specific styles.
+   Loaded after tokens.css and styles.css in focus.html. */
+
+/* ── Focus Mode HUD ── */
+.focus-hud {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 8px;
+}
+
+.focus-status {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    min-height: 24px;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+/* ── Stats pills ── */
+.stats-panel {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.stat-pill {
+    background: #f1f5f9;
+    border-radius: 99px;
+    padding: 4px 12px;
+    font-size: 12px;
+    color: var(--color-slate);
+}
+
+.stat-pill span {
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+/* ── Dimmed button state ── */
+button.btn-dim {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+/* ── Price target input ── */
+.price-target-input {
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.1);
+    font-size: 15px;
+    width: 140px;
+    outline: none;
+}
+
+.price-target-input.btn-dim {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.price-target-label {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+}
+
+/* ── Reveal count selector ── */
+.reveal-count-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.reveal-count-row label {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+}
+
+.reveal-count-select {
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.1);
+    font-size: 13px;
+    color: var(--color-text-primary);
+    background: var(--color-bg);
+    cursor: pointer;
+}
+
+/* ── Candle info panel ── */
+#candleInfo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 8px 14px;
+    margin-bottom: 8px;
+    min-height: 36px;
+    font-size: 13px;
+}
+
+.candle-info-empty {
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+    font-style: italic;
+}
+
+.candle-info-date  { font-weight: 600; color: var(--color-text-primary); font-size: 12px; }
+.candle-info-dir   { font-size: 14px; font-weight: 700; }
+.candle-info-item  { font-size: 13px; color: var(--color-slate); }
+.candle-info-label { font-size: 10px; font-weight: 700; color: var(--color-text-tertiary); margin-right: 2px; text-transform: uppercase; }
+
+/* ── Price feedback panel ── */
+#priceFeedback {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 8px 14px;
+    min-height: 36px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-slate);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+
+/* ── Live session report tray + cards ── */
+#liveSessionTray {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-height: 260px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-right: 4px;
+}
+
+.live-report-card {
+    background: #ffffff;
+    border: 1px solid var(--color-border);
+    border-left: 4px solid #64748b;
+    border-radius: 10px;
+    padding: 10px 12px;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
+}
+
+.live-report-card.is-correct { border-left-color: #10b981; }
+.live-report-card.is-wrong   { border-left-color: #ef4444; }
+
+.live-report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.live-report-round {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.live-report-result {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+.live-report-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--color-slate);
+    margin-bottom: 4px;
+}
+
+.live-report-row strong {
+    color: var(--color-text-primary);
+    font-weight: 700;
+}
+
+.live-report-explainer {
+    margin-top: 8px;
+    margin-bottom: 0;
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--color-slate);
+}
+
+/* New floating popup that slides into the tray */
+.live-report-popup {
+    position: fixed;
+    right: 24px;
+    top: 120px;
+    width: min(420px, calc(100vw - 32px));
+    opacity: 0;
+    transform: translateY(-12px);
+    z-index: 1200;
+    transition: transform 420ms ease, opacity 260ms ease;
+}
+
+.live-report-popup.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.live-report-popup.to-tray {
+    opacity: 0;
+    transform: translateY(300px);
+}
+
+/* ── Stats panel header + summary toggle ── */
+.stats-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.stats-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-tertiary);
+}
+
+.summary-toggle-btn {
+    background: none;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 99px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-indigo);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: background 0.15s;
+}
+
+.summary-toggle-btn:hover { background: #eef2ff; }
+
+/* ── Controls zone — the positioned wrapper that anchors floating panels ── */
+.controls-zone {
+    position: relative;  /* containing block for #summaryPanel and #patternExplainPanel */
+    margin-top: 12px;
+}
+
+/* ── Button row ── */
+.button-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* ── Summary panel — floats right over the controls zone, never over the chart ── */
+#summaryPanel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 46%;
+    max-width: 360px;
+    max-height: 140px;
+    overflow-y: auto;
+    z-index: 40;
+    background: rgba(238, 242, 255, 0.97);
+    border: 1px solid rgba(99,102,241,0.25);
+    border-left: 3px solid var(--color-indigo);
+    border-radius: 10px;
+    padding: 10px 13px;
+    font-size: 12px;
+    line-height: 1.65;
+    color: var(--color-slate);
+    box-shadow: 0 4px 16px rgba(99,102,241,0.10);
+    /* Translate upward so it sits just above the button row */
+    transform: translateY(calc(-100% - 6px));
+}
+
+#summaryPanel.hidden { display: none; }
+
+/* ── Pattern explanation panel — floats right, anchored to Explain Patterns button ── */
+#patternExplainPanel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 46%;
+    max-width: 360px;
+    max-height: 160px;
+    overflow-y: auto;
+    z-index: 40;
+    background: rgba(240, 253, 250, 0.97);
+    border: 1px solid rgba(15,118,110,0.2);
+    border-left: 3px solid var(--color-teal);
+    border-radius: 10px;
+    padding: 10px 13px;
+    font-size: 12px;
+    line-height: 1.65;
+    color: var(--color-slate);
+    box-shadow: 0 4px 16px rgba(15,118,110,0.08);
+    /* Translate upward so it sits just above the button row */
+    transform: translateY(calc(-100% - 6px));
+}
+
+#patternExplainPanel.hidden { display: none; }
+
+.pattern-explain-item  { margin-bottom: 8px; }
+.pattern-explain-label { font-weight: 700; color: var(--color-text-primary); margin-bottom: 2px; font-size: 12px; }
+
+/* ── Pattern panel — stays in document flow below buttons ── */
+#patternPanel {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 8px 12px;
+    margin-top: 8px;
+    font-size: 12px;
+}
+
+#patternPanel.hidden { display: none; }
+
+.pattern-tag {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 600;
+    margin: 2px 3px 2px 0;
+    background: #e0e7ff;
+    color: #3730a3;
+}
+
+.pattern-none {
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+    font-style: italic;
+}
+
+/* ── Button variants ── */
+.reveal-btn           { background: var(--color-indigo); color: white; }
+.btn-patterns         { background: var(--color-text-primary); color: white; }
+.btn-explain-patterns { background: var(--color-teal); color: white; }
+
+.btn-narrator {
+    background: var(--color-slate);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-narrator.active {
+    background: #a855f7;
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+}
+
+/* ── chart-wrapper must be a positioning parent ── */
+.chart-wrapper {
+    position: relative;
+}
+
+/* ── Drawing overlay canvas ── */
+#overlay-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* ── Draw controls container ── */
+#draw-controls {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 20;
+    display: flex;
+    gap: 4px;
+}
+
+/* ── Draw line button ── */
+#draw-line-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    background: rgba(255, 255, 255, 0.92);
+    color: #374151;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: background 0.15s, border-color 0.15s;
+}
+
+#draw-line-btn:hover {
+    background: #f0f9ff;
+    border-color: #3b82f6;
+}
+
+#draw-line-btn.active {
+    background: #3b82f6;
+    border-color: #2563eb;
+    color: #fff;
+}
+
+/* ── Chat toggle button ── */
+.btn-chat {
+    background: #0f172a;
+    color: #e2e8f0;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.btn-chat:hover  { background: #1e293b; }
+.btn-chat.active { background: #3b82f6; color: #fff; }
+
+/* ── Chat panel ── */
+#chatPanel {
+    margin-top: 12px;
+    border: 1px solid rgba(0,0,0,0.10);
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+#chatPanel.hidden { display: none; }
+
+/* Header */
+.chat-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 10px 14px 8px;
+    background: #0f172a;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.chat-header-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #f1f5f9;
+}
+.chat-header-sub {
+    font-size: 10px;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* Feed */
+.chat-feed {
+    height: 220px;
+    overflow-y: auto;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #f8fafc;
+}
+
+/* Bubbles */
+.chat-bubble {
+    max-width: 82%;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    line-height: 1.65;
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+.chat-bubble--engine {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    color: #1e293b;
+    align-self: flex-start;
+    border-bottom-left-radius: 3px;
+}
+.chat-bubble--user {
+    background: #3b82f6;
+    color: #fff;
+    align-self: flex-end;
+    border-bottom-right-radius: 3px;
+}
+
+/* Quick-action chips */
+.chat-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 7px 12px;
+    border-top: 1px solid #f1f5f9;
+    background: #fff;
+}
+.chat-chip {
+    padding: 3px 10px;
+    border-radius: 99px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    color: #334155;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.12s, border-color 0.12s;
+}
+.chat-chip:hover {
+    background: #eff6ff;
+    border-color: #93c5fd;
+    color: #1d4ed8;
+}
+
+/* Input row */
+.chat-input-row {
+    display: flex;
+    gap: 6px;
+    padding: 8px 12px 10px;
+    background: #fff;
+    border-top: 1px solid #f1f5f9;
+}
+.chat-input {
+    flex: 1;
+    padding: 7px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 12.5px;
+    color: #1e293b;
+    background: #f8fafc;
+    outline: none;
+}
+.chat-input:focus {
+    border-color: #3b82f6;
+    background: #fff;
+}
+.chat-send-btn {
+    padding: 7px 16px;
+    border-radius: 8px;
+    border: none;
+    background: #3b82f6;
+    color: #fff;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.12s;
+}
+.chat-send-btn:hover { background: #2563eb; }

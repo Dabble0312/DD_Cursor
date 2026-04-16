@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="DojiDash Game Mode — predict up or down on the next candlestick and build your streak.">
+    <title>DojiDash</title>
+    <link rel="icon" href="assets/images/Logo.gif" type="image/gif">
+    <link rel="stylesheet" href="tokens.css">
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body>
+
+    <div id="usernameDisplay" class="username-display"></div>
+    <div id="streakDisplay" class="streak-display">Streak: 0</div>
+    <div id="bestDisplay" class="best-display">Best: 0</div>
+
+    <div class="chart-wrapper">
+        <div id="chart"></div>
+        <div id="glowOverlay" class="glow-overlay"></div>
+    </div>
+
+    <button id="downBtn" class="down">DOWN</button>
+    <button id="upBtn" class="up">UP</button>
+
+    <div id="resultPopup" class="popup hidden">
+        <span id="popupResultText"></span>
+    </div>
+
+    <div id="wsbPopup" class="wsb-popup">
+        <img id="mascotEmoji" class="wsb-emoji">
+        <span id="wsbText" class="wsb-text"></span>
+    </div>
+
+    <div id="endScreen" class="end-screen hidden">
+        <div class="end-content">
+            <h2>Run Complete!</h2>
+            <p id="resultText"></p>
+            <button id="playAgainBtn">Play Again</button>
+            <button id="homeBtn">Home</button>
+        </div>
+    </div>
+
+    <!-- 1. Config -->
+    <script src="config.js"></script>
+    <!-- 2. Dependencies -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.1.0/dist/lightweight-charts.standalone.production.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- 3. Core Shared -->
+    <script src="supabase.js"></script>
+    <script src="shared/chart.js"></script>
+    <script src="shared/ui.js"></script>
+    <!-- 4. Page logic -->
+    <script src="script.js"></script>
+</body>
+
+</html>

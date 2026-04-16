@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Trading Intuition Trainer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #fcfcfd;
+    --surface: #ffffff;
+    --surface2: #f1f5f9;
+    --border: rgba(0, 0, 0, 0.06);
+    --accent: #6366f1; /* Indigo */
+    --accent2: #47c8ff;
+    --accent3: #ff6b47;
+    --text: #0f172a;
+    --text-dim: #64748b;
+    --text-muted: #94a3b8;
+    --green: #10b981;
+    --red: #ef4444;
+    --radius: 12px;
+    --font-display: 'Inter', -apple-system, sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { font-size: 16px; scroll-behavior: smooth; }
+
+  /* ── CLEAN LAYOUT (No Noise) ── */
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-display);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+
+  /* ── TOP NAV (Unified) ── */
+  .top-nav {
+    height: 72px;
+    background: #0f172a;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .nav-user {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.7);
+  }
+
+  .nav-user strong { color: #fff; font-weight: 700; }
+
+  .logout-link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 8px 16px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    background: rgba(255,255,255,0.05);
+  }
+
+  .logout-link:hover {
+    border-color: #ef4444;
+    color: #fff;
+    background: #ef4444;
+  }
+
+  .logo {
+    font-size: 13px; font-weight: 700; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--accent);
+    font-family: var(--font-mono);
+  }
+
+  .unit-tabs {
+    display: flex; gap: 4px;
+  }
+
+  .unit-tab {
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    cursor: pointer;
+    font-family: var(--font-display);
+    transition: all 0.2s;
+  }
+
+  .unit-tab.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+  }
+
+  .unit-tab.locked {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .unit-tab.unlocked:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* ── MAIN LAYOUT ── */
+  .main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 0;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 40px 32px;
+    gap: 32px;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    display: flex; flex-direction: column; gap: 8px;
+    background: white;
+    padding: 24px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+  }
+
+  .sidebar-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+
+  .lesson-nav-item {
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex; align-items: center; gap: 12px;
+  }
+
+  .lesson-nav-item:hover { background: #f8fafc; }
+
+  .lesson-nav-item.active {
+    background: #f1f5f9;
+    border-color: rgba(99, 102, 241, 0.1);
+  }
+
+  .lesson-nav-item.completed .nav-dot { background: var(--green); }
+  .lesson-nav-item.question-type .nav-dot { background: var(--accent2); }
+
+  .nav-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    flex-shrink: 0;
+  }
+
+  .nav-item-label {
+    font-size: 13px; color: var(--text-dim);
+    font-weight: 500;
+  }
+
+  .lesson-nav-item.active .nav-item-label { color: var(--accent); font-weight: 600; }
+  .lesson-nav-item.active .nav-dot { background: var(--accent); }
+
+  /* ── CONTENT AREA ── */
+  .content-area {
+    display: flex; flex-direction: column; gap: 32px;
+    min-height: 0;
+  }
+
+  /* ── UNIT HEADER ── */
+  .unit-header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 16px;
+  }
+
+  .unit-number {
+    font-family: var(--font-mono);
+    font-size: 11px; color: var(--accent);
+    letter-spacing: 0.15em; text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .unit-title {
+    font-size: 32px; font-weight: 800; line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .progress-ring {
+    flex-shrink: 0;
+    width: 56px; height: 56px;
+    position: relative;
+  }
+
+  .progress-ring svg { transform: rotate(-90deg); }
+
+  .progress-ring circle {
+    fill: none;
+    stroke-width: 3;
+  }
+
+  .ring-bg { stroke: var(--border); }
+  .ring-fill {
+    stroke: var(--accent);
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.4s ease;
+  }
+
+  .ring-label {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    font-family: var(--font-mono);
+    color: var(--accent);
+  }
+
+  /* ── CHART PLACEHOLDER ── */
+  .chart-placeholder {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    position: relative;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .chart-placeholder canvas {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+  }
+
+  .chart-label {
+    font-family: var(--font-mono);
+    font-size: 11px; color: var(--text-muted);
+    letter-spacing: 0.1em; text-transform: uppercase;
+    z-index: 2;
+  }
+
+  /* ── LESSON CARD ── */
+  .lesson-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px 40px;
+    display: none;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    animation: cardIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .lesson-card.visible { display: block; }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--text-muted); margin-bottom: 12px;
+  }
+
+  .card-eyebrow span { color: var(--accent); }
+
+  .lesson-text {
+    font-size: 17px; line-height: 1.65;
+    color: var(--text);
+    font-weight: 400;
+  }
+
+  /* ── INTRO CARD ── */
+  .intro-card {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    display: none;
+  }
+
+  .intro-card.visible { display: block; }
+
+  .intro-intro { font-size: 15px; line-height: 1.7; color: var(--text); margin-bottom: 20px; }
+
+  .intro-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;
+    margin-top: 20px;
+  }
+
+  .intro-block {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  .intro-block-label {
+    font-family: var(--font-mono);
+    font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--text-muted); margin-bottom: 8px;
+  }
+
+  .intro-block-label.learn { color: var(--accent); }
+  .intro-block-label.matters { color: var(--accent2); }
+  .intro-block-label.unlocks { color: var(--accent3); }
+
+  .intro-block p { font-size: 13px; line-height: 1.55; color: var(--text-dim); }
+
+  /* ── QUESTION CARD ── */
+  .question-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    display: none;
+  }
+
+  .question-card.visible { display: block; animation: cardIn 0.3s ease; }
+
+  .question-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(71,200,255,0.1);
+    border: 1px solid rgba(71,200,255,0.25);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-family: var(--font-mono);
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 16px;
+  }
+
+  .question-text {
+    font-size: 18px; font-weight: 600; line-height: 1.5;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+
+  .options-list {
+    display: flex; flex-direction: column; gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .option-btn {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    text-align: left;
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: 14px; color: var(--text-dim);
+    transition: all 0.15s;
+    display: flex; align-items: center; gap: 12px;
+  }
+
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent2);
+    color: var(--text);
+    background: rgba(71,200,255,0.04);
+  }
+
+  .option-btn.selected {
+    border-color: var(--accent2);
+    color: var(--text);
+    background: rgba(71,200,255,0.08);
+  }
+
+  .option-btn.correct {
+    border-color: var(--green);
+    background: rgba(74,222,128,0.08);
+    color: var(--green);
+  }
+
+  .option-btn.wrong {
+    border-color: var(--red);
+    background: rgba(248,113,113,0.08);
+    color: var(--red);
+  }
+
+  .option-letter {
+    width: 22px; height: 22px;
+    border-radius: 4px;
+    background: var(--surface2);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 11px; font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .feedback-strip {
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 13px; line-height: 1.5;
+    margin-bottom: 8px;
+    display: none;
+  }
+
+  .feedback-strip.correct { background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.25); color: var(--green); }
+  .feedback-strip.wrong   { background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.25); color: var(--red); }
+  .feedback-strip.visible { display: block; }
+
+  /* ── COMPLETE SCREEN ── */
+  .complete-screen {
+    display: none;
+    flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 60px 32px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    animation: cardIn 0.4s ease;
+  }
+
+  .complete-screen.visible { display: flex; }
+
+  .complete-icon {
+    width: 72px; height: 72px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 24px;
+    font-size: 32px;
+  }
+
+  .complete-title {
+    font-size: 28px; font-weight: 800; margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+
+  .complete-subtitle {
+    font-size: 15px; color: var(--text-dim);
+    max-width: 400px; line-height: 1.6; margin-bottom: 32px;
+  }
+
+  .complete-unlocks {
+    background: rgba(232,255,71,0.06);
+    border: 1px solid rgba(232,255,71,0.2);
+    border-radius: 8px;
+    padding: 16px 24px;
+    font-size: 13px; color: var(--accent);
+    margin-bottom: 32px;
+    max-width: 400px;
+    font-family: var(--font-mono);
+  }
+
+  .score-row {
+    display: flex; gap: 32px; margin-bottom: 32px;
+  }
+
+  .score-item {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+  }
+
+  .score-num {
+    font-size: 36px; font-weight: 800;
+    font-family: var(--font-mono);
+    color: var(--accent);
+  }
+
+  .score-label {
+    font-size: 11px; color: var(--text-muted);
+    letter-spacing: 0.12em; text-transform: uppercase;
+  }
+
+  /* ── ACTION BAR ── */
+  .action-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+    padding-top: 4px;
+  }
+
+  .nav-btns {
+    display: flex; gap: 8px;
+  }
+
+  .btn {
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-family: var(--font-display);
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: none;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+
+  .btn-ghost:hover { border-color: var(--text-dim); color: var(--text); }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+  }
+
+  .btn-primary:hover { background: #d4eb30; }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .btn-secondary {
+    background: var(--accent2);
+    color: #000;
+  }
+
+  .btn-secondary:hover { background: #30b8e8; }
+
+  .btn-icon {
+    padding: 10px 14px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.15s;
+  }
+
+  .btn-icon:hover { border-color: var(--text-dim); color: var(--text); }
+
+  /* ── SUMMARY BAR ── */
+  .summary-bar {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 13px; color: var(--text-dim);
+    line-height: 1.5;
+    font-style: italic;
+    display: none;
+  }
+
+  .summary-bar.visible { display: block; }
+
+  /* ── HIDE HELPERS ── */
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<nav class="top-nav">
+  <div class="nav-user">
+      <span id="userGreeting">Welcome, <strong id="currentUsername">...</strong></span>
+      <div style="display:flex; gap: 12px;">
+          <button onclick="window.location.href='index.html'" class="logout-link" style="border-color: rgba(255,255,255,0.2);">← Dashboard</button>
+          <button id="logoutBtn" class="logout-link">Logout</button>
+      </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- SIDEBAR NAV -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-label">In this unit</div>
+    <div id="navList"></div>
+  </aside>
+
+  <!-- CONTENT -->
+  <section class="content-area">
+
+    <!-- UNIT HEADER -->
+    <div class="unit-header">
+      <div>
+        <div class="unit-number" id="unitNumber"></div>
+        <h1 class="unit-title" id="unitTitle"></h1>
+      </div>
+      <div class="progress-ring">
+        <svg width="56" height="56" viewBox="0 0 56 56">
+          <circle class="ring-bg" cx="28" cy="28" r="24"/>
+          <circle class="ring-fill" id="ringFill" cx="28" cy="28" r="24"
+            stroke-dasharray="150.8" stroke-dashoffset="150.8"/>
+        </svg>
+        <div class="ring-label" id="ringLabel">0%</div>
+      </div>
+    </div>
+
+    <!-- CHART PLACEHOLDER -->
+    <div class="chart-placeholder" id="chartArea">
+      <canvas id="chartCanvas"></canvas>
+      <span class="chart-label" id="chartLabel">chart visualization</span>
+    </div>
+
+    <!-- INTRO CARD -->
+    <div class="intro-card" id="introCard">
+      <p class="intro-intro" id="introText"></p>
+      <div class="intro-grid">
+        <div class="intro-block">
+          <div class="intro-block-label learn">What you'll learn</div>
+          <p id="introLearn"></p>
+        </div>
+        <div class="intro-block">
+          <div class="intro-block-label matters">Why it matters</div>
+          <p id="introMatters"></p>
+        </div>
+        <div class="intro-block">
+          <div class="intro-block-label unlocks">What it unlocks</div>
+          <p id="introUnlocks"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- LESSON CARD -->
+    <div class="lesson-card" id="lessonCard">
+      <div class="card-eyebrow">Lesson <span id="lessonIndex"></span></div>
+      <p class="lesson-text" id="lessonText"></p>
+    </div>
+
+    <!-- QUESTION CARD -->
+    <div class="question-card" id="questionCard">
+      <div class="question-badge">Practice Question</div>
+      <p class="question-text" id="questionText"></p>
+      <div class="options-list" id="optionsList"></div>
+      <div class="feedback-strip" id="feedbackStrip"></div>
+    </div>
+
+    <!-- SUMMARY BAR -->
+    <div class="summary-bar" id="summaryBar"></div>
+
+    <!-- COMPLETE SCREEN -->
+    <div class="complete-screen" id="completeScreen">
+      <div class="complete-icon">✓</div>
+      <h2 class="complete-title" id="completeTitle"></h2>
+      <p class="complete-subtitle" id="completeSubtitle"></p>
+      <div class="score-row">
+        <div class="score-item">
+          <div class="score-num" id="scoreCorrect">0</div>
+          <div class="score-label">Correct</div>
+        </div>
+        <div class="score-item">
+          <div class="score-num" id="scoreTotal">0</div>
+          <div class="score-label">Questions</div>
+        </div>
+      </div>
+      <div class="complete-unlocks" id="completeUnlocks"></div>
+      <button class="btn btn-secondary" id="nextUnitBtn">Next Unit →</button>
+    </div>
+
+    <!-- ACTION BAR -->
+    <div class="action-bar" id="actionBar">
+      <div class="nav-btns">
+        <button class="btn btn-icon" id="prevBtn" title="Previous">←</button>
+        <button class="btn btn-icon" id="nextBtn" title="Next">→</button>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-ghost hidden" id="submitBtn">Submit Answer</button>
+        <button class="btn btn-primary" id="continueBtn">Continue →</button>
+      </div>
+    </div>
+
+  </section>
+</main>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// CURRICULUM DATA
+// ═══════════════════════════════════════════════════════════════
+
+const CURRICULUM = [
+  {
+    id: 1,
+    title: "Candle Anatomy",
+    intro: "Every price chart is built from candlesticks. Before you can read a chart, you need to understand what a single candle is actually telling you. Think of it like learning the alphabet — once you know each letter, you can start reading words.",
+    learn: "How to read direction, body size, doji candles, wicks, and what sequences of candles tell you.",
+    matters: "Candlesticks are the alphabet of charts. Everything else builds on this.",
+    unlocks: "You'll start seeing movement and intention instead of random colored rectangles.",
+    summary: "Every candle tells a story about buyers and sellers. Direction, size, and shape are your clues.",
+    lessons: [
+      { text: "A candlestick represents price movement over a period of time — it could be one minute, one hour, or one day." },
+      { text: "The opening price is where trading started for that period. The closing price is where it ended." },
+      { text: "If the close is higher than the open, the candle is bullish (usually shown in green). Buyers won that round." },
+      { text: "If the close is lower than the open, the candle is bearish (usually shown in red). Sellers won that round." },
+      { text: "The body of the candle is the filled rectangle between the open and the close. A big body means a strong move." },
+      { text: "A small body means the price didn't move much from where it started — buyers and sellers were roughly equal." },
+      { text: "A doji is a candle where the open and close are nearly the same. It signals indecision — nobody's in control." },
+      { text: "The wicks (also called shadows) extend above and below the body. They show how far price moved before reversing." },
+      { text: "A long upper wick means buyers pushed price up, but sellers came in and pushed it back down before the close." },
+      { text: "A sequence of candles in one direction is a trend. Mixed candles with no clear direction is called chop — avoid trading in chop." }
+    ],
+    questions: [
+      {
+        text: "A green (bullish) candle means:",
+        options: ["The close was lower than the open", "The close was higher than the open", "The price didn't move", "Volume was high"],
+        correct: 1,
+        explanation: "Green (bullish) candles form when price closes higher than it opened — buyers were in control."
+      },
+      {
+        text: "What does a large candle body tell you?",
+        options: ["The market was quiet", "There was a strong move in one direction", "Price reversed sharply", "Volume was low"],
+        correct: 1,
+        explanation: "A big body means price moved a lot from open to close — one side (buyers or sellers) dominated the period."
+      },
+      {
+        text: "A doji candle suggests:",
+        options: ["A strong bullish trend", "Sellers are winning", "Neither buyers nor sellers are in control", "Price is about to crash"],
+        correct: 2,
+        explanation: "Doji candles form when open and close are nearly identical — a sign of indecision and balance between buyers and sellers."
+      },
+      {
+        text: "A long upper wick on a candle means:",
+        options: ["Buyers stayed in control all period", "Price tried to go higher but sellers pushed it back down", "Volume was zero", "The candle is bullish"],
+        correct: 1,
+        explanation: "An upper wick shows that price tested higher levels, but sellers came in and drove it back down before the close."
+      },
+      {
+        text: "What is 'chop' in a price chart?",
+        options: ["A strong uptrend", "A series of candles with no clear direction", "High-volume buying", "A reversal pattern"],
+        correct: 1,
+        explanation: "Chop refers to mixed, directionless price action — candles go up and down without a clear trend, making it hard to trade."
+      }
+    ]
+  },
+  {
+    id: 2,
+    title: "Volume",
+    intro: "A candle alone can mislead you. Volume is what gives each candle its weight. A big green candle on no volume is very different from a big green candle on massive volume. Learning to read volume is like learning to tell the difference between a whisper and a shout.",
+    learn: "What high and low volume mean, how to spot volume spikes, and why quiet markets behave differently from active ones.",
+    matters: "Volume is the context behind every candle. Without it, you're only seeing half the picture.",
+    unlocks: "You'll be able to tell strong moves from weak ones, and real moves from fake-outs.",
+    summary: "Volume tells you how many people participated in a move. More participants usually means more conviction.",
+    lessons: [
+      { text: "Volume measures how many shares, contracts, or units were traded during a candle's time period." },
+      { text: "High volume means a lot of people were trading — the move had participation and energy behind it." },
+      { text: "Low volume means fewer people were involved — moves on thin volume are less trustworthy." },
+      { text: "A big price move on high volume is a strong signal. Many participants agreed that price should go that direction." },
+      { text: "A big price move on low volume is a weak signal. It can reverse quickly because not many people backed the move." },
+      { text: "A volume spike — a sudden jump in trading activity — means something got attention. News, earnings, or a breakout often cause spikes." },
+      { text: "Volume dropping off usually means the market is going quiet. Fewer participants means tighter, less exciting price action." },
+      { text: "Rising price on rising volume is the healthiest kind of uptrend. Both price and participation are growing together." },
+      { text: "Rising price on falling volume can be a warning sign — the move may be running out of buyers." },
+      { text: "Volume bars are usually shown below the price chart as a histogram. Taller bars mean more activity." }
+    ],
+    questions: [
+      {
+        text: "A big price move on very low volume should make you:",
+        options: ["Confident in the move", "Suspicious — it might not last", "Buy immediately", "Ignore volume entirely"],
+        correct: 1,
+        explanation: "Low-volume moves lack participation. Without many traders backing the move, it can easily reverse."
+      },
+      {
+        text: "What does a volume spike usually indicate?",
+        options: ["A calm, quiet market", "Something grabbed the market's attention — news, a breakout, or major interest", "Price is about to reverse", "The chart is broken"],
+        correct: 1,
+        explanation: "Volume spikes happen when a lot of people suddenly want to trade — often triggered by news, earnings reports, or key price levels being hit."
+      },
+      {
+        text: "Rising price + rising volume is generally:",
+        options: ["A warning sign", "The healthiest type of uptrend", "A sign the trend is ending", "Irrelevant"],
+        correct: 1,
+        explanation: "When both price and volume rise together, more participants are joining the move — that's strong confirmation."
+      },
+      {
+        text: "Low volume in a market typically means:",
+        options: ["A crash is coming", "Fewer participants and less reliable price moves", "The trend is very strong", "Volume doesn't matter"],
+        correct: 1,
+        explanation: "When fewer traders are active, price can drift without conviction. Low-volume moves are easier to manipulate and more likely to reverse."
+      },
+      {
+        text: "Rising price on falling volume suggests:",
+        options: ["The uptrend is gaining strength", "The move may be losing its buyers", "Sellers have given up", "A major breakout is starting"],
+        correct: 1,
+        explanation: "If price keeps going up but fewer people are buying, the move is becoming weaker. It can be an early warning that the trend may stall."
+      }
+    ]
+  },
+  {
+    id: 3,
+    title: "Volatility",
+    intro: "Markets don't always move the same way. Sometimes they explode with big, wild candles. Other times they barely move at all. Volatility is just the word we use to describe how much a market is moving — and it tells you a lot about what kind of environment you're in.",
+    learn: "What high and low volatility look like, what long wicks signal, and what it means when candles compress into tight ranges.",
+    matters: "Volatility is the texture of the market. It tells you whether conditions are calm, chaotic, or about to change.",
+    unlocks: "You'll be able to read whether a market is resting or raging, and spot when a big move might be building.",
+    summary: "Volatility is the market's mood. Reading it helps you know whether to act or wait.",
+    lessons: [
+      { text: "Volatility describes how much a market's price moves over a given period. High volatility = big moves. Low volatility = small moves." },
+      { text: "A candle with a large range from high to low — even if it has a small body — indicates high volatility in that period." },
+      { text: "A candle with a tiny range from high to low indicates low volatility. The market barely moved." },
+      { text: "Long wicks on candles are a sign of instability — price tried to go somewhere but got rejected hard." },
+      { text: "Multiple candles with long wicks in a row means the market is struggling to find direction. It's unstable and unpredictable." },
+      { text: "Tight, small candles clustered together are called compression. The market is coiling — often a sign that a bigger move is coming." },
+      { text: "Volatility tends to expand after compression. A long quiet period often leads to a sharp breakout in one direction." },
+      { text: "High volatility can mean opportunity, but it also means more risk. Prices can move against you just as fast as they move for you." },
+      { text: "Low volatility is not boring — it's information. It tells you the market is resting, waiting, or gathering energy." },
+      { text: "Experienced traders pay close attention to when volatility shifts. A sudden expansion in candle size after a quiet period is often significant." }
+    ],
+    questions: [
+      {
+        text: "What does a candle with a very large range (high to low) tell you?",
+        options: ["The market was quiet", "Volatility was high during that period", "Volume must have been low", "It's a doji"],
+        correct: 1,
+        explanation: "A large candle range means price moved a lot — that's high volatility. Whether that's good or bad depends on the context."
+      },
+      {
+        text: "What do multiple long wicks in a row suggest?",
+        options: ["A strong, clean trend", "The market is unstable and struggling for direction", "Volume is rising", "A breakout just happened"],
+        correct: 1,
+        explanation: "Repeated long wicks show price keeps getting rejected. It's a sign of instability — neither buyers nor sellers can gain lasting control."
+      },
+      {
+        text: "What is 'compression' in price action?",
+        options: ["A series of huge candles", "Tight, small candles clustering together in a narrow range", "A sharp drop in price", "High volume combined with low price movement"],
+        correct: 1,
+        explanation: "Compression is when candles become small and tight. The market is coiling — often a precursor to a larger move."
+      },
+      {
+        text: "Low volatility in a market most likely means:",
+        options: ["Nothing is happening and it doesn't matter", "The market is resting, waiting, or gathering energy", "A crash is guaranteed next", "Volume is always high"],
+        correct: 1,
+        explanation: "Low volatility is a phase, not a permanent state. It often means the market is compressing before its next expansion."
+      },
+      {
+        text: "After a long period of tight, low-volatility candles, what often follows?",
+        options: ["More tight candles forever", "A volatility expansion — a sharp move in one direction", "Doji candles appear", "Volume disappears completely"],
+        correct: 1,
+        explanation: "Markets cycle between compression and expansion. After a quiet stretch, volatility tends to expand — often with a notable breakout."
+      }
+    ]
+  }
+];
+
+// ═══════════════════════════════════════════════════════════════
+// STATE & AUTH
+// ═══════════════════════════════════════════════════════════════
+
+// ── AUTH CHECK ──
+const username = localStorage.getItem("username");
+if (!username) {
+    window.location.href = "login.html";
+} else {
+    document.getElementById("currentUsername").textContent = username;
+}
+
+// ── LOGOUT ──
+document.getElementById("logoutBtn").addEventListener("click", () => {
+    localStorage.removeItem("username");
+    window.location.href = "login.html";
+});
+
+const state = {
+  currentUnit: 0,
+  currentCardIndex: 0,
+  answeredQuestions: {},   // { "unitId-qIndex": true/false }
+  unlockedUnits: [0],
+  scores: {},              // { unitId: { correct, total } }
+  selectedOption: null,
+  submitted: false
+};
+
+// Card sequence for a unit: intro (0), lessons (1..N), questions (N+1..)
+function buildCardSequence(unit) {
+  const cards = [];
+  cards.push({ type: 'intro' });
+  unit.lessons.forEach((l, i) => cards.push({ type: 'lesson', index: i }));
+  unit.questions.forEach((q, i) => cards.push({ type: 'question', index: i }));
+  cards.push({ type: 'complete' });
+  return cards;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CHART DRAWINGS
+// ═══════════════════════════════════════════════════════════════
+
+const CHART_THEMES = [
+  // Unit 1 — candle sequence
+  (ctx, w, h) => {
+    ctx.clearRect(0, 0, w, h);
+    const candles = [
+      { o:0.5,  c:0.62, lo:0.44, hi:0.66, bull:true },
+      { o:0.62, c:0.58, lo:0.53, hi:0.67, bull:false },
+      { o:0.58, c:0.58, lo:0.51, hi:0.65, bull:false }, // doji-ish
+      { o:0.58, c:0.72, lo:0.54, hi:0.76, bull:true },
+      { o:0.72, c:0.68, lo:0.64, hi:0.8,  bull:false }, // long wick
+      { o:0.68, c:0.78, lo:0.65, hi:0.82, bull:true },
+      { o:0.78, c:0.75, lo:0.7,  hi:0.84, bull:false },
+      { o:0.75, c:0.82, lo:0.72, hi:0.85, bull:true },
+    ];
+    const cw = w / (candles.length * 2 + 1);
+    candles.forEach((c, i) => {
+      const x = cw * (i * 2 + 1.5);
+      const color = c.bull ? '#4ade80' : '#f87171';
+      ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(x, h - c.hi * h * 0.75 - h * 0.1);
+      ctx.lineTo(x, h - c.lo * h * 0.75 - h * 0.1);
+      ctx.stroke();
+      const top = h - Math.max(c.o, c.c) * h * 0.75 - h * 0.1;
+      const bot = h - Math.min(c.o, c.c) * h * 0.75 - h * 0.1;
+      const bh = Math.max(bot - top, 2);
+      ctx.fillStyle = color;
+      ctx.fillRect(x - cw * 0.5, top, cw, bh);
+    });
+    // labels
+    ctx.fillStyle = 'rgba(232,255,71,0.5)';
+    ctx.font = '10px IBM Plex Mono';
+    ctx.fillText('BODY', 35, h - 0.62 * h * 0.75 - h * 0.1 + 8);
+    ctx.fillText('WICK', w - 80, h - 0.8 * h * 0.75 - h * 0.1);
+  },
+  // Unit 2 — candles + volume bars
+  (ctx, w, h) => {
+    ctx.clearRect(0, 0, w, h);
+    const data = [
+      { price:0.5,  pvol:0.2,  bull:true  },
+      { price:0.55, pvol:0.35, bull:true  },
+      { price:0.52, pvol:0.15, bull:false },
+      { price:0.6,  pvol:0.8,  bull:true  }, // spike
+      { price:0.65, pvol:0.6,  bull:true  },
+      { price:0.62, pvol:0.25, bull:false },
+      { price:0.58, pvol:0.18, bull:false },
+      { price:0.7,  pvol:0.9,  bull:true  }, // spike
+    ];
+    const n = data.length;
+    const cw = w / (n * 2 + 1);
+    const priceH = h * 0.55;
+    const volH = h * 0.3;
+    const volY = h * 0.65;
+    // divider
+    ctx.strokeStyle = 'rgba(30,35,48,1)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0, volY); ctx.lineTo(w, volY); ctx.stroke();
+    data.forEach((d, i) => {
+      const x = cw * (i * 2 + 1.5);
+      const color = d.bull ? '#4ade80' : '#f87171';
+      // candle body
+      const bodyH = 0.08 * priceH;
+      const bodyY = priceH - d.price * priceH * 0.85 - h * 0.02;
+      ctx.fillStyle = color;
+      ctx.fillRect(x - cw * 0.5, bodyY, cw, bodyH);
+      // wick
+      ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(x, bodyY - bodyH * 0.8); ctx.lineTo(x, bodyY + bodyH * 1.8);
+      ctx.stroke();
+      // vol bar
+      const vbH = d.pvol * volH;
+      ctx.fillStyle = d.pvol > 0.6 ? 'rgba(232,255,71,0.7)' : (d.bull ? 'rgba(74,222,128,0.4)' : 'rgba(248,113,113,0.4)');
+      ctx.fillRect(x - cw * 0.5, volY + (volH - vbH), cw, vbH);
+    });
+    ctx.fillStyle = 'rgba(107,114,128,0.8)';
+    ctx.font = '9px IBM Plex Mono';
+    ctx.fillText('PRICE', 8, 18);
+    ctx.fillText('VOLUME', 8, volY + 16);
+    ctx.fillStyle = 'rgba(232,255,71,0.6)';
+    ctx.fillText('↑ SPIKE', cw * 7.5 - 20, volY + 26);
+  },
+  // Unit 3 — volatility expansion
+  (ctx, w, h) => {
+    ctx.clearRect(0, 0, w, h);
+    const data = [
+      { r:0.05, lo:0.5 }, { r:0.04, lo:0.52 }, { r:0.03, lo:0.51 }, // compression
+      { r:0.04, lo:0.51 }, { r:0.05, lo:0.5  }, { r:0.03, lo:0.52 },
+      { r:0.18, lo:0.48 }, // breakout
+      { r:0.22, lo:0.58 }, { r:0.20, lo:0.68 }, { r:0.16, lo:0.72 }, // expansion
+    ];
+    const n = data.length;
+    const cw = w / (n * 2 + 1);
+    const margin = h * 0.1;
+    const availH = h - margin * 2;
+    // compression bracket
+    ctx.strokeStyle = 'rgba(71,200,255,0.3)'; ctx.lineWidth = 1;
+    ctx.setLineDash([4,4]);
+    const cx1 = cw * 0.5, cx2 = cw * 13;
+    ctx.strokeRect(cx1, h * 0.42, cx2 - cx1, h * 0.18);
+    ctx.setLineDash([]);
+    ctx.fillStyle = 'rgba(71,200,255,0.5)';
+    ctx.font = '9px IBM Plex Mono';
+    ctx.fillText('COMPRESSION', cx1 + 4, h * 0.42 - 4);
+    data.forEach((d, i) => {
+      const x = cw * (i * 2 + 1.5);
+      const bull = i % 2 === 0;
+      const color = bull ? '#4ade80' : '#f87171';
+      const mid = margin + (1 - d.lo) * availH;
+      const bodyH = d.r * availH;
+      ctx.fillStyle = color;
+      ctx.fillRect(x - cw * 0.45, mid - bodyH / 2, cw * 0.9, bodyH);
+      ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(x, mid - bodyH * 1.4); ctx.lineTo(x, mid + bodyH * 1.4);
+      ctx.stroke();
+    });
+    ctx.fillStyle = 'rgba(232,255,71,0.5)';
+    ctx.font = '9px IBM Plex Mono';
+    ctx.fillText('↑ EXPANSION', cw * 13.5, h * 0.3);
+  }
+];
+
+function drawChart(unitIndex) {
+  const canvas = document.getElementById('chartCanvas');
+  const container = document.getElementById('chartArea');
+  const label = document.getElementById('chartLabel');
+  const labels = ['Candle Anatomy', 'Volume Context', 'Volatility Expansion'];
+  label.textContent = '';
+  canvas.width = container.offsetWidth;
+  canvas.height = container.offsetHeight;
+  const ctx = canvas.getContext('2d');
+  if (CHART_THEMES[unitIndex]) CHART_THEMES[unitIndex](ctx, canvas.width, canvas.height);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════════════════
+
+function render() {
+  const unit = CURRICULUM[state.currentUnit];
+  const cards = buildCardSequence(unit);
+  const card = cards[state.currentCardIndex];
+  const total = cards.length;
+
+  // Unit header
+  document.getElementById('unitNumber').textContent = `Unit ${unit.id}`;
+  document.getElementById('unitTitle').textContent = unit.title;
+
+  // Progress ring
+  const pct = Math.round((state.currentCardIndex / (total - 1)) * 100);
+  const circ = 150.8;
+  const offset = circ - (pct / 100) * circ;
+  document.getElementById('ringFill').style.strokeDashoffset = offset;
+  document.getElementById('ringLabel').textContent = pct + '%';
+
+  // Draw chart
+  drawChart(state.currentUnit);
+
+  // Sidebar
+  renderSidebar(unit, cards);
+
+  // Hide all panels
+  document.getElementById('introCard').classList.remove('visible');
+  document.getElementById('lessonCard').classList.remove('visible');
+  document.getElementById('questionCard').classList.remove('visible');
+  document.getElementById('completeScreen').classList.remove('visible');
+  document.getElementById('summaryBar').classList.remove('visible');
+  document.getElementById('actionBar').style.display = 'flex';
+  document.getElementById('submitBtn').classList.add('hidden');
+  document.getElementById('continueBtn').classList.remove('hidden');
+
+  if (card.type === 'intro') renderIntro(unit);
+  else if (card.type === 'lesson') renderLesson(unit, card.index, cards);
+  else if (card.type === 'question') renderQuestion(unit, card.index);
+  else if (card.type === 'complete') renderComplete(unit);
+
+  // Nav arrows
+  document.getElementById('prevBtn').disabled = state.currentCardIndex === 0;
+  document.getElementById('nextBtn').disabled = state.currentCardIndex >= total - 1;
+}
+
+function renderSidebar(unit, cards) {
+  const list = document.getElementById('navList');
+  list.innerHTML = '';
+  cards.forEach((card, i) => {
+    if (card.type === 'complete') return;
+    const div = document.createElement('div');
+    div.className = 'lesson-nav-item';
+    if (i === state.currentCardIndex) div.classList.add('active');
+    if (card.type === 'question') div.classList.add('question-type');
+    const key = `${unit.id}-${card.index}`;
+    if (card.type !== 'intro' && state.answeredQuestions[key] !== undefined) div.classList.add('completed');
+
+    const dot = document.createElement('div'); dot.className = 'nav-dot';
+    const label = document.createElement('div'); label.className = 'nav-item-label';
+
+    if (card.type === 'intro') label.textContent = 'Introduction';
+    else if (card.type === 'lesson') label.textContent = `Lesson ${card.index + 1}: ${truncate(unit.lessons[card.index].text, 38)}`;
+    else if (card.type === 'question') label.textContent = `Q${card.index + 1}: ${truncate(unit.questions[card.index].text, 38)}`;
+
+    div.appendChild(dot); div.appendChild(label);
+    div.addEventListener('click', () => { state.currentCardIndex = i; state.selectedOption = null; state.submitted = false; render(); });
+    list.appendChild(div);
+  });
+}
+
+function truncate(str, n) { return str.length > n ? str.slice(0, n) + '…' : str; }
+
+function renderIntro(unit) {
+  document.getElementById('introCard').classList.add('visible');
+  document.getElementById('introText').textContent = unit.intro;
+  document.getElementById('introLearn').textContent = unit.learn;
+  document.getElementById('introMatters').textContent = unit.matters;
+  document.getElementById('introUnlocks').textContent = unit.unlocks;
+  document.getElementById('continueBtn').textContent = 'Start Learning →';
+}
+
+function renderLesson(unit, index, cards) {
+  document.getElementById('lessonCard').classList.add('visible');
+  document.getElementById('lessonIndex').textContent = `${index + 1} of ${unit.lessons.length}`;
+  document.getElementById('lessonText').textContent = unit.lessons[index].text;
+
+  // Show summary on last lesson
+  const isLastLesson = index === unit.lessons.length - 1;
+  if (isLastLesson) {
+    const bar = document.getElementById('summaryBar');
+    bar.textContent = '📌 ' + unit.summary;
+    bar.classList.add('visible');
+  }
+
+  document.getElementById('continueBtn').textContent = 'Continue →';
+}
+
+function renderQuestion(unit, index) {
+  const q = unit.questions[index];
+  const key = `${unit.id}-${index}`;
+  const alreadyAnswered = state.answeredQuestions[key] !== undefined;
+
+  document.getElementById('questionCard').classList.add('visible');
+  document.getElementById('questionText').textContent = q.text;
+
+  const list = document.getElementById('optionsList');
+  list.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="option-letter">${letters[i]}</span>${opt}`;
+
+    if (alreadyAnswered) {
+      btn.disabled = true;
+      if (i === q.correct) btn.classList.add('correct');
+      else if (i === state.selectedOption && i !== q.correct) btn.classList.add('wrong');
+    } else if (state.submitted) {
+      btn.disabled = true;
+      if (i === q.correct) btn.classList.add('correct');
+      else if (i === state.selectedOption) btn.classList.add('wrong');
+    } else {
+      if (i === state.selectedOption) btn.classList.add('selected');
+      btn.addEventListener('click', () => selectOption(i));
+    }
+    list.appendChild(btn);
+  });
+
+  const feedback = document.getElementById('feedbackStrip');
+  const wasCorrect = state.answeredQuestions[key];
+  if (alreadyAnswered || state.submitted) {
+    const correct = alreadyAnswered ? wasCorrect : (state.selectedOption === q.correct);
+    feedback.textContent = correct ? `✓ Correct! ${q.explanation}` : `✗ Not quite. ${q.explanation}`;
+    feedback.className = `feedback-strip visible ${correct ? 'correct' : 'wrong'}`;
+  } else {
+    feedback.className = 'feedback-strip';
+    feedback.textContent = '';
+  }
+
+  // Buttons
+  const submitBtn = document.getElementById('submitBtn');
+  const continueBtn = document.getElementById('continueBtn');
+  if (!alreadyAnswered && !state.submitted) {
+    submitBtn.classList.remove('hidden');
+    continueBtn.classList.add('hidden');
+    submitBtn.disabled = state.selectedOption === null;
+  } else {
+    submitBtn.classList.add('hidden');
+    continueBtn.classList.remove('hidden');
+    continueBtn.textContent = 'Continue →';
+  }
+}
+
+function renderComplete(unit) {
+  document.getElementById('completeScreen').classList.add('visible');
+  document.getElementById('actionBar').style.display = 'none';
+  document.getElementById('completeTitle').textContent = `Unit ${unit.id} Complete!`;
+  document.getElementById('completeSubtitle').textContent = unit.summary;
+  document.getElementById('completeUnlocks').textContent = '🔓 ' + unit.unlocks;
+
+  const score = state.scores[unit.id] || { correct: 0, total: unit.questions.length };
+  document.getElementById('scoreCorrect').textContent = score.correct;
+  document.getElementById('scoreTotal').textContent = score.total;
+
+  const nextBtn = document.getElementById('nextUnitBtn');
+  const nextUnitIndex = state.currentUnit + 1;
+  if (nextUnitIndex < CURRICULUM.length) {
+    nextBtn.textContent = `Start Unit ${CURRICULUM[nextUnitIndex].id}: ${CURRICULUM[nextUnitIndex].title} →`;
+    nextBtn.style.display = '';
+    nextBtn.onclick = () => {
+      state.unlockedUnits.push(nextUnitIndex);
+      state.currentUnit = nextUnitIndex;
+      state.currentCardIndex = 0;
+      state.selectedOption = null;
+      state.submitted = false;
+      renderUnitTabs();
+      render();
+    };
+  } else {
+    nextBtn.textContent = 'All units complete! 🎉';
+    nextBtn.onclick = null;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// UNIT TABS
+// ═══════════════════════════════════════════════════════════════
+
+function renderUnitTabs() {
+  const tabs = document.getElementById('unitTabs');
+  tabs.innerHTML = '';
+  CURRICULUM.forEach((unit, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'unit-tab';
+    btn.textContent = `U${unit.id}: ${unit.title}`;
+
+    const isUnlocked = state.unlockedUnits.includes(i);
+    if (i === state.currentUnit) btn.classList.add('active');
+    else if (isUnlocked) {
+      btn.classList.add('unlocked');
+      btn.addEventListener('click', () => {
+        state.currentUnit = i;
+        state.currentCardIndex = 0;
+        state.selectedOption = null;
+        state.submitted = false;
+        renderUnitTabs();
+        render();
+      });
+    } else {
+      btn.classList.add('locked');
+      btn.title = 'Complete previous unit to unlock';
+    }
+    tabs.appendChild(btn);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INTERACTIONS
+// ═══════════════════════════════════════════════════════════════
+
+function selectOption(i) {
+  state.selectedOption = i;
+  const unit = CURRICULUM[state.currentUnit];
+  const cards = buildCardSequence(unit);
+  const card = cards[state.currentCardIndex];
+  renderQuestion(unit, card.index);
+  document.getElementById('submitBtn').disabled = false;
+}
+
+function advance() {
+  const unit = CURRICULUM[state.currentUnit];
+  const cards = buildCardSequence(unit);
+  if (state.currentCardIndex < cards.length - 1) {
+    state.currentCardIndex++;
+    state.selectedOption = null;
+    state.submitted = false;
+    render();
+  }
+}
+
+document.getElementById('continueBtn').addEventListener('click', advance);
+
+document.getElementById('submitBtn').addEventListener('click', () => {
+  const unit = CURRICULUM[state.currentUnit];
+  const cards = buildCardSequence(unit);
+  const card = cards[state.currentCardIndex];
+  const q = unit.questions[card.index];
+  const key = `${unit.id}-${card.index}`;
+  const correct = state.selectedOption === q.correct;
+  state.answeredQuestions[key] = correct;
+  state.submitted = true;
+
+  // update score
+  if (!state.scores[unit.id]) state.scores[unit.id] = { correct: 0, total: unit.questions.length };
+  if (correct) state.scores[unit.id].correct++;
+
+  renderQuestion(unit, card.index);
+});
+
+document.getElementById('prevBtn').addEventListener('click', () => {
+  if (state.currentCardIndex > 0) {
+    state.currentCardIndex--;
+    state.selectedOption = null;
+    state.submitted = false;
+    render();
+  }
+});
+
+document.getElementById('nextBtn').addEventListener('click', () => {
+  const unit = CURRICULUM[state.currentUnit];
+  const cards = buildCardSequence(unit);
+  if (state.currentCardIndex < cards.length - 1) {
+    state.currentCardIndex++;
+    state.selectedOption = null;
+    state.submitted = false;
+    render();
+  }
+});
+
+// Redraw chart on resize
+window.addEventListener('resize', () => drawChart(state.currentUnit));
+
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
+
+renderUnitTabs();
+render();
+</script>
+</body>
+</html>

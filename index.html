@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DojiDash — build your trading intuition in the ultimate training hub.">
+    <title>Training Hub | DojiDash</title>
+    <link rel="icon" href="assets/images/Logo.gif" type="image/gif">
+
+    <!-- Design System -->
+    <link rel="stylesheet" href="tokens.css">
+    <link rel="stylesheet" href="dashboard.css">
+
+    <!-- Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- TOP NAVIGATION -->
+    <nav class="top-nav">
+        <div class="nav-user">
+            <span id="userGreeting">Welcome, <strong id="currentUsername">...</strong></span>
+            <button id="logoutBtn" class="logout-link">Logout</button>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="hero">
+        <img src="assets/images/Logo.gif" alt="DojiDash Logo" class="mascot-icon">
+        <h1>Your Training Hub</h1>
+        <p>Choose a mode to continue your journey</p>
+    </header>
+
+    <!-- MODE GRID (2x3) -->
+    <main class="dashboard-grid">
+
+        <!-- Mode 1: Start Game -->
+        <div id="startBtn" class="mode-card">
+            <div class="card-icon icon-green">🎮</div>
+            <div class="card-content">
+                <h2>Predictive Game</h2>
+                <p>Test your intuition against real-world price action data in the classic DojiDash mode.</p>
+            </div>
+        </div>
+
+        <!-- Mode 2: Focus Mode -->
+        <div id="focusBtn" class="mode-card">
+            <div class="card-icon icon-indigo">🔍</div>
+            <div class="card-content">
+                <h2>Focus Mode</h2>
+                <p>Analyze specific patterns with AI-driven insights to sharpen your technical analysis.</p>
+            </div>
+        </div>
+
+        <!-- Mode 3: Trading Mode -->
+        <div id="tradingBtn" class="mode-card">
+            <div class="card-icon icon-slate">📈</div>
+            <div class="card-content">
+                <h2>Trading Simulator</h2>
+                <p>Enter and exit trades in a risk-free environment with advanced charting controls.</p>
+            </div>
+        </div>
+
+        <!-- Mode 4: Learn Basics -->
+        <div id="learnBtn" class="mode-card">
+            <div class="card-icon icon-teal">📚</div>
+            <div class="card-content">
+                <h2>Learn Fundamentals</h2>
+                <p>Master the core concepts of candlesticks, volume, and market psychology.</p>
+            </div>
+        </div>
+
+        <!-- Mode 5: Take Test -->
+        <div id="testBtn" class="mode-card">
+            <div class="card-icon icon-blue">🧩</div>
+            <div class="card-content">
+                <h2> Quiz </h2>
+                <p>Validate and build your knowledge </p>
+            </div>
+        </div>
+
+        <!-- Mode 6: Coming Soon -->
+        <div class="mode-card" style="opacity: 0.6; cursor: default;">
+            <div class="card-icon">🔜</div>
+            <div class="card-content">
+                <h2>More Coming Soon</h2>
+                <p>New training modules and community challenges are currently in development.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="dashboard-footer">
+        <p class="footer-text">
+            DojiDash: A tiny experiment in intuition, probability, and fun.
+        </p>
+    </footer>
+
+    <!-- SCRIPTS (Shared with original dashboard) -->
+    <!-- 1. Configuration -->
+    <script src="config.js"></script>
+    <!-- 2. Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- 3. Shared client -->
+    <script src="supabase.js"></script>
+    <!-- 4. Page logic (Persisted IDs ensure this works untoched) -->
+    <script src="homepage.js"></script>
+
+</body>
+
+</html>

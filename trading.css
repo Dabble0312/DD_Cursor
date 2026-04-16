@@ -1,0 +1,147 @@
+/* trading.css — Trading Mode specific styles.
+   Loaded after tokens.css and styles.css in trading.html. */
+
+/* ── Two-column layout ── */
+.trading-layout {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 16px;
+    align-items: start;
+}
+
+/* ── Right panel ── */
+.tape-panel {
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--color-surface);
+    display: flex;
+    flex-direction: column;
+    min-height: 480px;
+}
+
+.tape-header {
+    padding: 12px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--color-text-secondary);
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-bg);
+}
+
+/* ── Live trade card ── */
+#liveTrade {
+    padding: 16px 14px;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-bg);
+}
+
+#liveTrade.hidden { display: none; }
+
+.live-direction { font-size: 22px; font-weight: 800; letter-spacing: 1px; margin-bottom: 4px; }
+.live-entry     { font-size: 11px; color: var(--color-text-tertiary); margin-bottom: 6px; }
+.live-price     { font-size: 26px; font-weight: 700; color: var(--color-text-primary); margin-bottom: 4px; }
+.live-pl        { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+.live-duration  { font-size: 11px; color: var(--color-text-tertiary); }
+
+/* ── Closed trade tape ── */
+.tape-table-wrap { flex: 1; overflow-y: auto; }
+
+.tape-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.tape-table thead th {
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-tertiary);
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface);
+    position: sticky;
+    top: 0;
+}
+
+.tape-table tbody tr  { border-bottom: 1px solid rgba(0,0,0,0.04); }
+.tape-table tbody td  { padding: 9px 10px; color: var(--color-text-primary); vertical-align: middle; }
+
+/* ── Session summary ── */
+#sessionSummary {
+    padding: 12px 14px;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-bg);
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-bottom: 4px;
+}
+
+.summary-row strong { color: var(--color-text-primary); }
+
+/* ── HUD + status ── */
+.trading-hud {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 4px;
+}
+
+.trading-status {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    min-height: 22px;
+    margin-bottom: 10px;
+}
+
+/* ── Button row ── */
+.trading-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+}
+
+.btn-buy            { background: var(--color-emerald); color: white; }
+.btn-sell           { background: var(--color-rose);    color: white; }
+.btn-exit           { background: var(--color-indigo);  color: white; }
+.btn-reveal-trading { background: var(--color-text-primary); color: white; }
+.btn-end-session    { background: var(--color-text-tertiary); color: white; }
+
+button.btn-dim { opacity: 0.35; cursor: not-allowed; }
+
+/* ── End screen ── */
+.end-screen {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(15,23,42,0.92);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999;
+}
+
+.end-content {
+    background: var(--color-surface);
+    padding: 32px;
+    border-radius: var(--modal-radius);
+    text-align: center;
+    width: 90%;
+    max-width: 380px;
+    color: var(--color-text-primary);
+}
+
+.end-content h2    { margin-top: 0; }
+#playAgainBtn      { background: var(--color-emerald); color: white; width: 100%; margin-bottom: 10px; }
+#homeBtn           { background: var(--color-text-secondary); color: white; width: 100%; }

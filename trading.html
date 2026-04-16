@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="DojiDash Trading Mode — simulate real trades with live P&L tracking on historical candlestick data.">
+    <title>DojiDash — Trading Mode</title>
+    <link rel="icon" href="assets/images/Logo.gif" type="image/gif">
+    <link rel="stylesheet" href="tokens.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="trading.css">
+
+
+<body class="trading-body">
+
+    <div id="usernameDisplay" class="username-display-trading"></div>
+    <div id="tradingHUD" class="trading-hud">Loading...</div>
+    <div id="tradingStatus" class="trading-status"></div>
+
+    <div class="trading-layout">
+
+        <!-- Left: chart -->
+        <div>
+            <div class="chart-wrapper">
+                <div id="chart"></div>
+            </div>
+
+            <!-- Buttons below chart -->
+            <div class="trading-buttons">
+                <button id="revealBtn" class="btn-reveal-trading">REVEAL</button>
+                <button id="buyBtn" class="btn-buy">BUY</button>
+                <button id="sellBtn" class="btn-sell">SELL</button>
+                <button id="exitBtn" class="btn-exit">EXIT</button>
+                <button id="endSessionBtn" class="btn-end-session">End Session</button>
+            </div>
+        </div>
+
+        <!-- Right: trade tape panel -->
+        <div class="tape-panel">
+            <div class="tape-header">Trade Tape</div>
+
+            <!-- Live open trade — large font, top of panel -->
+            <div id="liveTrade" class="hidden"></div>
+
+            <!-- Closed trades table -->
+            <div class="tape-table-wrap">
+                <table class="tape-table">
+                    <thead>
+                        <tr>
+                            <th>Dir</th>
+                            <th>Entry</th>
+                            <th>Exit</th>
+                            <th>P/L</th>
+                            <th>Dur</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tapebody"></tbody>
+                </table>
+            </div>
+
+            <!-- Session summary — updates after each close -->
+            <div id="sessionSummary">
+                <span class="summary-empty">No trades yet</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- End screen -->
+    <div id="endScreen" class="end-screen hidden">
+        <div class="end-content">
+            <h2>Session Over</h2>
+            <p></p>
+            <button id="playAgainBtn">New Session</button>
+            <button id="homeBtn">Home</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.1.0/dist/lightweight-charts.standalone.production.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script src="shared/chart.js"></script>
+    <script src="shared/ui.js"></script>
+    <script src="tradingMode.js"></script>
+</body>
+
+</html>

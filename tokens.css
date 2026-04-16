@@ -1,0 +1,62 @@
+/* tokens.css — Single source of truth for all design tokens.
+   Link this as the FIRST stylesheet in every HTML page.
+   styles.css and page-specific CSS files rely on these variables. */
+
+:root {
+  /* ── Spacing ── */
+  --space-xxs: 4px;
+  --space-xs:  8px;
+  --space-sm:  12px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  32px;
+
+  /* ── Typography ── */
+  --font-h1:   24px;
+  --font-h2:   20px;
+  --font-body: 16px;
+  --font-caption: 14px;
+
+  --font-weight-bold:    600;
+  --font-weight-medium:  500;
+  --font-weight-regular: 400;
+
+  /* ── Brand Colors ── */
+  --color-bg:      #f8fafc;
+  --color-surface: #ffffff;
+  --color-border:  rgba(0, 0, 0, 0.06);
+
+  --color-text-primary:   #0f172a;
+  --color-text-secondary: #64748b;
+  --color-text-tertiary:  #94a3b8;
+
+  --color-emerald: #10b981;
+  --color-rose:    #ef4444;
+  --color-indigo:  #6366f1;
+  --color-teal:    #0f766e;
+  --color-slate:   #334155;
+
+  /* ── Candlestick Colors (mirror shared/chart.js) ── */
+  --candle-up:   #26a69a;
+  --candle-down: #ef5350;
+
+  /* ── Layout ── */
+  --chart-height:   60vh;
+  --logo-width:     240px;
+  --input-width:    280px;
+  --wsb-width:      320px;
+
+  /* ── Radii ── */
+  --button-radius: 12px;
+  --card-radius:   16px;
+  --modal-radius:  20px;
+
+  /* ── Transitions ── */
+  --transition-fast:   0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --transition-ease:   0.4s ease;
+
+  /* ── Animation durations ── */
+  --animation-fade:  0.8s ease;
+  --animation-flash: 0.6s ease-in-out;
+}

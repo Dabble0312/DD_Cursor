@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Login to DojiDash — build your trading intuition.">
+    <title>Login | DojiDash</title>
+    <link rel="icon" href="assets/images/Logo.gif" type="image/gif">
+    
+    <!-- Design System -->
+    <link rel="stylesheet" href="tokens.css">
+    <link rel="stylesheet" href="login.css">
+    
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Left Section: Brand & Atmosphere -->
+    <aside class="login-left">
+        <img src="assets/images/Logo.gif" alt="DojiDash Logo" class="brand-logo">
+    </aside>
+
+    <!-- Right Section: Login Interaction -->
+    <main class="login-right">
+        <div class="login-card">
+            <header class="login-header">
+                <h1>Welcome back</h1>
+                <p>Enter your name to start your training session.</p>
+            </header>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="usernameInput">Username</label>
+                    <input 
+                        type="text" 
+                        id="usernameInput" 
+                        class="form-input" 
+                        placeholder="e.g. DiamondHands" 
+                        required 
+                        autocomplete="off"
+                        autofocus
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="passwordInput">Password (Optional / Demo)</label>
+                    <input 
+                        type="password" 
+                        id="passwordInput" 
+                        class="form-input" 
+                        placeholder="••••••••" 
+                        disabled
+                    >
+                    <p style="font-size: 11px; color: #94a3b8; margin-top: 6px;">Fake login for demo purposes. Password is not required.</p>
+                </div>
+
+                <button type="submit" class="login-btn">
+                    Secure Entry
+                </button>
+            </form>
+
+            <footer class="login-footer">
+                <p>New to the Dojo? <a href="#">Learn about our mission</a></p>
+            </footer>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('usernameInput').value.trim();
+            
+            if (username.length === 0) {
+                alert("Please enter a username to proceed.");
+                return;
+            }
+
+            // Save to LocalStorage so shared/ui.js and other components can access it
+            localStorage.setItem("username", username);
+            
+            console.log("Logged in as:", username);
+            
+            // Redirect to the existing dashboard
+            window.location.href = "index.html";
+        });
+    </script>
+</body>
+</html>
