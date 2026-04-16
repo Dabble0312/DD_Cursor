@@ -181,8 +181,8 @@ function initChart() {
     chart = window.LightweightCharts.createChart(chartDiv, {
         height: 501,
         layout: {
-            textColor:       '#000',
-            backgroundColor: '#fff',
+            textColor:       '#e2e8f0',
+            backgroundColor: '#0a0f1a',
         },
         timeScale: {
             timeVisible:    true,
