@@ -1,5 +1,14 @@
 /* focus.css — Focus Mode specific styles.
-   Loaded after tokens.css and styles.css in focus.html. */
+   Loaded after tokens.css and tokens-dark.css in focus.html. */
+
+/* ── Dark Theme Surface Classes ── */
+.surface-card {
+    background-color: var(--color-surface);
+}
+
+.surface-card-elevated {
+    background-color: var(--color-surface-elevated);
+}
 
 /* ── Focus Mode HUD ── */
 .focus-hud {
@@ -26,11 +35,11 @@
 }
 
 .stat-pill {
-    background: #f1f5f9;
+    background: var(--color-surface-elevated);
     border-radius: 99px;
     padding: 4px 12px;
     font-size: 12px;
-    color: var(--color-slate);
+    color: var(--color-text-secondary);
 }
 
 .stat-pill span {
@@ -141,12 +150,12 @@ button.btn-dim {
 }
 
 .live-report-card {
-    background: #ffffff;
+    background: var(--color-surface);
     border: 1px solid var(--color-border);
-    border-left: 4px solid #64748b;
+    border-left: 4px solid var(--color-text-tertiary);
     border-radius: 10px;
     padding: 10px 12px;
-    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 .live-report-card.is-correct { border-left-color: #10b981; }
@@ -274,15 +283,15 @@ button.btn-dim {
     max-height: 140px;
     overflow-y: auto;
     z-index: 40;
-    background: rgba(238, 242, 255, 0.97);
-    border: 1px solid rgba(99,102,241,0.25);
+    background: var(--color-surface-elevated);
+    border: 1px solid var(--color-border);
     border-left: 3px solid var(--color-indigo);
     border-radius: 10px;
     padding: 10px 13px;
     font-size: 12px;
     line-height: 1.65;
-    color: var(--color-slate);
-    box-shadow: 0 4px 16px rgba(99,102,241,0.10);
+    color: var(--color-text-secondary);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
     /* Translate upward so it sits just above the button row */
     transform: translateY(calc(-100% - 6px));
 }
@@ -299,15 +308,15 @@ button.btn-dim {
     max-height: 160px;
     overflow-y: auto;
     z-index: 40;
-    background: rgba(240, 253, 250, 0.97);
-    border: 1px solid rgba(15,118,110,0.2);
+    background: var(--color-surface-elevated);
+    border: 1px solid var(--color-border);
     border-left: 3px solid var(--color-teal);
     border-radius: 10px;
     padding: 10px 13px;
     font-size: 12px;
     line-height: 1.65;
-    color: var(--color-slate);
-    box-shadow: 0 4px 16px rgba(15,118,110,0.08);
+    color: var(--color-text-secondary);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
     /* Translate upward so it sits just above the button row */
     transform: translateY(calc(-100% - 6px));
 }
@@ -438,10 +447,10 @@ button.btn-dim {
 /* ── Chat panel ── */
 #chatPanel {
     margin-top: 12px;
-    border: 1px solid rgba(0,0,0,0.10);
+    border: 1px solid var(--color-border);
     border-radius: 14px;
-    background: #fff;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    background: var(--color-surface);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -454,17 +463,17 @@ button.btn-dim {
     align-items: baseline;
     justify-content: space-between;
     padding: 10px 14px 8px;
-    background: #0f172a;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: var(--color-surface-elevated);
+    border-bottom: 1px solid var(--color-border);
 }
 .chat-header-title {
     font-size: 13px;
     font-weight: 700;
-    color: #f1f5f9;
+    color: var(--color-text-primary);
 }
 .chat-header-sub {
     font-size: 10px;
-    color: #64748b;
+    color: var(--color-text-tertiary);
     text-transform: uppercase;
     letter-spacing: 0.04em;
 }
@@ -477,7 +486,7 @@ button.btn-dim {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    background: #f8fafc;
+    background: var(--color-bg);
 }
 
 /* Bubbles */
@@ -491,15 +500,15 @@ button.btn-dim {
     white-space: pre-wrap;
 }
 .chat-bubble--engine {
-    background: #fff;
-    border: 1px solid #e2e8f0;
-    color: #1e293b;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
     align-self: flex-start;
     border-bottom-left-radius: 3px;
 }
 .chat-bubble--user {
-    background: #3b82f6;
-    color: #fff;
+    background: var(--color-indigo);
+    color: white;
     align-self: flex-end;
     border-bottom-right-radius: 3px;
 }
@@ -510,24 +519,24 @@ button.btn-dim {
     flex-wrap: wrap;
     gap: 5px;
     padding: 7px 12px;
-    border-top: 1px solid #f1f5f9;
-    background: #fff;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-surface);
 }
 .chat-chip {
     padding: 3px 10px;
     border-radius: 99px;
-    border: 1px solid #e2e8f0;
-    background: #f8fafc;
-    color: #334155;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface-elevated);
+    color: var(--color-text-secondary);
     font-size: 11px;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.12s, border-color 0.12s;
 }
 .chat-chip:hover {
-    background: #eff6ff;
-    border-color: #93c5fd;
-    color: #1d4ed8;
+    background: var(--color-accent);
+    border-color: var(--color-indigo);
+    color: var(--color-text-primary);
 }
 
 /* Input row */
@@ -535,29 +544,29 @@ button.btn-dim {
     display: flex;
     gap: 6px;
     padding: 8px 12px 10px;
-    background: #fff;
-    border-top: 1px solid #f1f5f9;
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
 }
 .chat-input {
     flex: 1;
     padding: 7px 12px;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--color-border);
     border-radius: 8px;
     font-size: 12.5px;
-    color: #1e293b;
-    background: #f8fafc;
+    color: var(--color-text-primary);
+    background: var(--color-bg);
     outline: none;
 }
 .chat-input:focus {
-    border-color: #3b82f6;
-    background: #fff;
+    border-color: var(--color-indigo);
+    background: var(--color-surface);
 }
 .chat-send-btn {
     padding: 7px 16px;
     border-radius: 8px;
     border: none;
-    background: #3b82f6;
-    color: #fff;
+    background: var(--color-indigo);
+    color: white;
     font-size: 12.5px;
     font-weight: 600;
     cursor: pointer;
